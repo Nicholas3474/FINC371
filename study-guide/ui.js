@@ -106,7 +106,7 @@ function renderPlan(){
   `<section class="notes"><h3>About your materials</h3><ul>
   <li>Source: “FINC 371 - Exam 2” in your Google Drive (a classmate's notes covering Units 6, 8, 9 and Chapters 16–18). Every page was read.</li>
   <li><b>Formulas and figures were images and did not come through.</b> The formulas here are the standard textbook forms, written with your notes' variable names (PV, FV, A, i, n, m). Check them against your slides.</li>
-  <li>There is no Unit 7 in the file. Confirm whether it's on the exam.</li>
+  <li><b>Exam coverage confirmed: Chapters 6, 8, 9, 16, 17 and 18.</b> All six are in the notes, and every topic in this guide comes from them. Chapter 7 is not on the exam.</li>
   <li>Possible errors in the notes are flagged inside each lesson (REIT 90% vs 95%, cost approach $717,500 vs $718,000, the “FVA” label on the loan balance formula).</li></ul></section>`;
 }
 
