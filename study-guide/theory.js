@@ -160,3 +160,54 @@ function ktQ(ch){
   r.key=t.t;return r;
 }
 [6,8,9,16,17,18].forEach(ch=>{GEN['kt'+ch]=[()=>ktQ(ch)];});
+
+/* ===== Income approach (Ch 9): its own topic; GIM and cap-rate math move here from appraisal math ===== */
+GEN.apm=GEN.apm.filter((_,i)=>i!==2&&i!==3);
+GEN.inc=[
+()=>{const pgi=ri(10,80)*10000,vac=pick([4,5,7,10]),oth=ri(0,6)*1000,ox=Math.round(pgi*rs(0.3,0.45,0.01)/1000)*1000,R=rs(6,10,0.25),egi=pgi*(1-vac/100)+oth,NOI=egi-ox,V=NOI/(R/100);
+ return numQ('inc',`An apartment building has potential gross income of ${$0(pgi)}${oth?`, other income of ${$0(oth)}`:''}, ${vac}% vacancy and collection loss, and operating expenses of ${$0(ox)}. The market cap rate is ${R}%. What is its value by direct capitalization?`,V,'$',
+ `<p class="eq">EGI = ${$0(pgi)} × (1 − ${vac/100})${oth?` + ${$0(oth)}`:''} = ${$0(egi)}<br>NOI = EGI − operating expenses = ${$0(egi)} − ${$0(ox)} = ${$0(NOI)}<br>Value = NOI ÷ R = ${$0(NOI)} ÷ ${dec(R)} = <b>${$m(V)}</b></p>`,
+ [(pgi-ox)/(R/100),egi/(R/100),NOI*R/10]);},
+()=>{const R=rs(6.5,10,0.25),c=[0,1,2].map(()=>{const n=ri(6,40)*5000,r=R+rs(-0.5,0.5,0.25);return {n,p:Math.round(n/(r/100)/1000)*1000};}),rs_=c.map(x=>x.n/x.p*100),avg=rs_.reduce((a,b)=>a+b,0)/3,NOI=ri(6,40)*5000,V=NOI/(avg/100);
+ return numQ('inc',`Three comparable sales: ${c.map((x,i)=>`#${i+1} NOI ${$0(x.n)}, price ${$0(x.p)}`).join('; ')}. Using the average cap rate of the comps, estimate the value of a subject property with NOI of ${$0(NOI)}.`,V,'$',
+ `<p class="eq">${c.map((x,i)=>`R${i+1} = ${$0(x.n)} ÷ ${$0(x.p)} = ${rs_[i].toFixed(2)}%`).join('<br>')}<br>Average R = ${avg.toFixed(2)}%<br>Value = ${$0(NOI)} ÷ ${(avg/100).toFixed(4)} = <b>${$m(V)}</b></p><p class="muted">Cap rates come from the market: R = NOI ÷ sale price for each comparable.</p>`,
+ [NOI*avg/100*10,NOI/(Math.max(...rs_)/100)*1.0001>V*1.02?NOI/(Math.max(...rs_)/100):V*0.93,NOI*(c[0].p/c[0].n)*1.06]);},
+()=>{const NOI=ri(6,80)*5000,R=rs(5.5,10.5,0.25),P=Math.round(NOI/(R/100)/1000)*1000,r=NOI/P*100;
+ return numQ('inc',`A shopping center with NOI of ${$0(NOI)} just sold for ${$0(P)}. What capitalization rate does this sale indicate?`,r,'%',
+ `<p class="eq">R = NOI ÷ price = ${$0(NOI)} ÷ ${$0(P)} = <b>${r.toFixed(2)}%</b></p>`,
+ [P/NOI,r*1.2,100-r>20?r+1.5:r-1.5]);},
+()=>{const NOI=ri(6,80)*5000,R1=rs(6,9,0.25),R2=R1+pick([0.5,0.75,1,1.25]),V1=NOI/(R1/100),V2=NOI/(R2/100),D=V1-V2;
+ return numQ('inc',`A property earns NOI of ${$0(NOI)}. If market cap rates rise from ${R1}% to ${R2}%, by how much does its value fall?`,D,'$',
+ `<p class="eq">Value at ${R1}% = ${$0(NOI)} ÷ ${dec(R1)} = ${$m(V1)}<br>Value at ${R2}% = ${$0(NOI)} ÷ ${dec(R2)} = ${$m(V2)}<br>Decrease = <b>${$m(D)}</b></p><p>Value and cap rate move in <b>opposite</b> directions.</p>`,
+ [NOI*(R2-R1)/100,V2,D*R2/R1]);},
+()=>{const g=rs(6,11,0.25),c=[0,1].map(()=>{const gi=ri(5,40)*10000,G=g+rs(-0.5,0.5,0.25);return {gi,p:Math.round(gi*G/1000)*1000};}),Gs=c.map(x=>x.p/x.gi),avg=(Gs[0]+Gs[1])/2,sg=ri(5,40)*10000,V=avg*sg;
+ return numQ('inc',`Comparable A sold for ${$0(c[0].p)} with gross income of ${$0(c[0].gi)}. Comparable B sold for ${$0(c[1].p)} with gross income of ${$0(c[1].gi)}. Using their average gross income multiplier, what is a subject with ${$0(sg)} gross income worth?`,V,'$',
+ `<p class="eq">GIM A = ${Gs[0].toFixed(2)}; GIM B = ${Gs[1].toFixed(2)}; average = ${avg.toFixed(2)}<br>Value = ${avg.toFixed(2)} × ${$0(sg)} = <b>${$m(V)}</b></p>`,
+ [sg/avg,sg*Math.max(...Gs)*1.03,sg*avg*0.9]);},
+()=>{const V=ri(40,300)*10000,R=rs(5.5,10,0.25),NOI=V*R/100;
+ return numQ('inc',`An investor will pay ${$0(V)} for an office building if it earns the market cap rate of ${R}%. What NOI must the property produce?`,NOI,'$',
+ `<p class="eq">NOI = V × R = ${$0(V)} × ${dec(R)} = <b>${$m(NOI)}</b></p>`,
+ [V/R,V*R/1000,NOI*1.15]);},
+];
+BANK.inc=[
+['The income approach is based mainly on which appraisal principle?',['Anticipation','Contribution','Change','Substitution only'],'Buyers pay for the future benefits (cash flows and resale) they expect.'],
+['What are the two steps of the income approach?',['Estimate future income, then convert it into a present value','Find comparables, then adjust them','Estimate cost, then subtract depreciation','Estimate land value, then add improvements'],'From the notes: estimate income, convert to present value.'],
+['The income approach is most appropriate for…',['Income-producing property such as apartments and shopping malls','Churches and schools','Owner-occupied single-family homes in active markets','Vacant land with no income'],'Those are the examples your notes give.'],
+['Which three techniques does the unit review list for the income approach?',['Gross income multiplier, net income capitalization and discounted cash flow','Sales comparison, cost and income','Comparative-unit, segregated-cost and quantity-survey','Age-life, breakdown and market extraction'],'DCF uses the Chapter 17 present value tools.'],
+['A gross income multiplier is calculated as…',['Sale price ÷ gross income','Net income ÷ sale price','Gross income ÷ sale price','Sale price ÷ net operating income'],'Value = GIM × the subject\'s gross income.'],
+['When is the GIM most appropriate?',['When properties have similar operating expenses','When expenses vary widely','When the property has no income','When financing is unusual'],'GIM ignores expenses, so it only works when they are similar.'],
+['What is the main weakness of the gross income multiplier?',['It ignores differences in operating expenses and vacancy','It requires a cap rate','It uses net income','It can only be used for vacant land'],'Two buildings with the same rent but different expenses get the same value.'],
+['How does net income capitalization differ from GIM analysis?',['It uses net operating income and a capitalization rate instead of gross income and a multiplier','It uses gross income and a rate','It uses construction cost','It ignores income'],'From your notes: net income, not gross; a rate, not a multiplier.'],
+['Which is NOT deducted when calculating net operating income?',['Mortgage (debt service) payments','Property taxes','Property insurance','Maintenance and repairs'],'NOI is income before financing. Debt service is what DCR compares NOI to.'],
+['Effective gross income equals…',['Potential gross income minus vacancy and collection losses (plus other income)','NOI minus operating expenses','Potential gross income plus expenses','Sale price times the cap rate'],'Then NOI = EGI − operating expenses.'],
+['If the cap rate rises while NOI stays the same, the indicated value…',['Falls','Rises','Stays the same','Doubles'],'V = NOI ÷ R. A bigger denominator means a smaller value.'],
+['If NOI rises 5% and the cap rate is unchanged, value…',['Rises 5%','Falls 5%','Is unchanged','Rises 50%'],'Value is directly proportional to NOI at a fixed cap rate.'],
+['Where does an appraiser get the capitalization rate?',['From comparable sales: each comp\'s NOI ÷ its sale price','From the mortgage interest rate','From the tax assessor','From the buyer\'s required down payment'],'From your notes: a $1M property with $100,000 NOI implies a 10% rate.'],
+['A property with $100,000 of NOI sold for $1,000,000. A similar property should produce $105,000 of NOI. Its value is…',['$1,050,000','$1,000,000','$105,000','$950,000'],'R = 10%; $105,000 ÷ 0.10 = $1,050,000 (the example in your notes).'],
+['A property with $100,000 gross income sold for $1 million. A comparable property has $9,000 of gross income. Using the GIM, its value is…',['$90,000','$900,000','$9,000','$100,000'],'GIM = 10, so value = 10 × $9,000 (the example in your notes).'],
+['A riskier income property, compared with a safer one with the same NOI, will generally have…',['A higher cap rate and a lower value','A lower cap rate and a higher value','The same value','A higher GIM'],'Investors demand more return for more risk (Chapter 17), and a higher rate means a lower value.'],
+['In reconciliation, the income approach should get the most weight for…',['An apartment complex bought as an investment','A church','A new single-family home in a busy subdivision','A vacant lot'],'Weight goes to the approach with the most reliable data for that property type.'],
+['Discounted cash flow analysis values a property by…',['Discounting each year\'s forecast cash flow and the resale price to present value','Multiplying gross income by a multiplier','Dividing one year\'s NOI by a cap rate','Adding land value to depreciated cost'],'It uses the PV tools from Chapter 17.'],
+['Which formula is direct capitalization?',['V = NOI ÷ R','V = NOI × R','V = R ÷ NOI','V = GIM ÷ gross income'],'Remember "IRV": Income = Rate × Value.'],
+['A GIM of 8 means…',['The price is 8 times the property\'s gross income','The cap rate is 8%','Expenses are 8% of income','The building is 8 years old'],'It is a multiplier, not a rate.'],
+];

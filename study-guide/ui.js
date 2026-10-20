@@ -24,7 +24,7 @@ const PLAN=[
  {day:'Wed · Oct 21',sub:'About 5 hours: Ch 6, 8, 9 theory, then the 2-hour practice exam.',items:[
   ['w4','Theory: Contracts & closings (Ch 6)','k'],['w9','Key terms: Chapter 6','kt6'],
   ['w5','Theory: Brokerage & agency (Ch 8)','brk'],['w10','Key terms: Chapter 8','kt8'],
-  ['w2','Theory: Appraisal concepts (Ch 9)','apc'],['w11','Key terms: Chapter 9','kt9'],['w1','Appraisal math','apm'],
+  ['w2','Theory: Appraisal concepts (Ch 9)','apc'],['w11','Key terms: Chapter 9','kt9'],['w1','Appraisal math: cost & sales comparison','apm'],['w12','Income approach: GIM, cap rates, NOI','inc'],
   ['w6','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['w7','Review every missed question and redo similar ones','mistakes'],
   ['w8','Key-term and formula flashcards; lights out by 11 PM','formulas']]},
@@ -131,7 +131,7 @@ function renderTopics(){
 let P=null; // {title, qs, i, picked, done, score}
 function startPractice(kind){
   let qs=[],title='';
-  if(kind==='diag'){title='Diagnostic';qs=['lump','annuity','npv','pay','bal','points','uw','apm','k','brk'].map(id=>makeQ(id));}
+  if(kind==='diag'){title='Diagnostic';qs=['lump','annuity','npv','pay','bal','points','uw','inc','k','brk'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
@@ -166,8 +166,8 @@ function renderPractice(){
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
 /* exam blueprint: about two-thirds theory, one-third math, matching how the notes are weighted */
-const THEORY_SLOTS=[['kt6',4],['kt8',4],['kt9',4],['kt16',6],['kt17',3],['kt18',2],['k',5],['brk',5],['apc',5],['fin',6],['npv',1],['pay',1],['points',1],['arm',1],['uw',1]].map(([id,w])=>({id,w,mode:'theory'}));
-const MATH_SLOTS=[['lump',2],['annuity',2],['npv',2],['pay',3],['bal',3],['refi',2],['points',2],['arm',2],['uw',3],['apm',3]].map(([id,w])=>({id,w,mode:'math'}));
+const THEORY_SLOTS=[['kt6',4],['kt8',4],['kt9',4],['kt16',6],['kt17',3],['kt18',2],['k',5],['brk',5],['apc',5],['fin',6],['npv',1],['pay',1],['points',1],['arm',1],['uw',1],['inc',2]].map(([id,w])=>({id,w,mode:'theory'}));
+const MATH_SLOTS=[['lump',2],['annuity',2],['npv',2],['pay',3],['bal',3],['refi',2],['points',2],['arm',2],['uw',3],['apm',2],['inc',2]].map(([id,w])=>({id,w,mode:'math'}));
 function dedupe(arr,fn){const seen=new Set();return arr.map(()=>{let q,t=0;do{q=fn();}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);return q;});}
 function buildSet(n,slots){
   const tot=slots.reduce((a,b)=>a+b.w,0);

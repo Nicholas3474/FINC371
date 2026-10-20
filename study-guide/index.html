@@ -224,7 +224,8 @@ const TOPICS=[
  {id:'brk',unit:'Ch 8',name:'Brokerage & agency',quant:false},
  {id:'kt8',unit:'Ch 8',name:'Key terms: brokerage',quant:false,kt:8},
  {id:'apc',unit:'Ch 9',name:'Appraisal concepts',quant:false},
- {id:'apm',unit:'Ch 9',name:'Appraisal math',quant:true},
+ {id:'apm',unit:'Ch 9',name:'Appraisal math: cost & sales comparison',quant:true},
+ {id:'inc',unit:'Ch 9',name:'Income approach',quant:true},
  {id:'kt9',unit:'Ch 9',name:'Key terms: appraisal',quant:false,kt:9},
  {id:'fin',unit:'Ch 16',name:'Mortgage law, markets & regulation',quant:false},
  {id:'uw',unit:'Ch 16',name:'Underwriting ratios: MDR, TDR, LTV, DCR',quant:true},
@@ -813,6 +814,57 @@ function ktQ(ch){
   r.key=t.t;return r;
 }
 [6,8,9,16,17,18].forEach(ch=>{GEN['kt'+ch]=[()=>ktQ(ch)];});
+
+/* ===== Income approach (Ch 9): its own topic; GIM and cap-rate math move here from appraisal math ===== */
+GEN.apm=GEN.apm.filter((_,i)=>i!==2&&i!==3);
+GEN.inc=[
+()=>{const pgi=ri(10,80)*10000,vac=pick([4,5,7,10]),oth=ri(0,6)*1000,ox=Math.round(pgi*rs(0.3,0.45,0.01)/1000)*1000,R=rs(6,10,0.25),egi=pgi*(1-vac/100)+oth,NOI=egi-ox,V=NOI/(R/100);
+ return numQ('inc',`An apartment building has potential gross income of ${$0(pgi)}${oth?`, other income of ${$0(oth)}`:''}, ${vac}% vacancy and collection loss, and operating expenses of ${$0(ox)}. The market cap rate is ${R}%. What is its value by direct capitalization?`,V,'$',
+ `<p class="eq">EGI = ${$0(pgi)} × (1 − ${vac/100})${oth?` + ${$0(oth)}`:''} = ${$0(egi)}<br>NOI = EGI − operating expenses = ${$0(egi)} − ${$0(ox)} = ${$0(NOI)}<br>Value = NOI ÷ R = ${$0(NOI)} ÷ ${dec(R)} = <b>${$m(V)}</b></p>`,
+ [(pgi-ox)/(R/100),egi/(R/100),NOI*R/10]);},
+()=>{const R=rs(6.5,10,0.25),c=[0,1,2].map(()=>{const n=ri(6,40)*5000,r=R+rs(-0.5,0.5,0.25);return {n,p:Math.round(n/(r/100)/1000)*1000};}),rs_=c.map(x=>x.n/x.p*100),avg=rs_.reduce((a,b)=>a+b,0)/3,NOI=ri(6,40)*5000,V=NOI/(avg/100);
+ return numQ('inc',`Three comparable sales: ${c.map((x,i)=>`#${i+1} NOI ${$0(x.n)}, price ${$0(x.p)}`).join('; ')}. Using the average cap rate of the comps, estimate the value of a subject property with NOI of ${$0(NOI)}.`,V,'$',
+ `<p class="eq">${c.map((x,i)=>`R${i+1} = ${$0(x.n)} ÷ ${$0(x.p)} = ${rs_[i].toFixed(2)}%`).join('<br>')}<br>Average R = ${avg.toFixed(2)}%<br>Value = ${$0(NOI)} ÷ ${(avg/100).toFixed(4)} = <b>${$m(V)}</b></p><p class="muted">Cap rates come from the market: R = NOI ÷ sale price for each comparable.</p>`,
+ [NOI*avg/100*10,NOI/(Math.max(...rs_)/100)*1.0001>V*1.02?NOI/(Math.max(...rs_)/100):V*0.93,NOI*(c[0].p/c[0].n)*1.06]);},
+()=>{const NOI=ri(6,80)*5000,R=rs(5.5,10.5,0.25),P=Math.round(NOI/(R/100)/1000)*1000,r=NOI/P*100;
+ return numQ('inc',`A shopping center with NOI of ${$0(NOI)} just sold for ${$0(P)}. What capitalization rate does this sale indicate?`,r,'%',
+ `<p class="eq">R = NOI ÷ price = ${$0(NOI)} ÷ ${$0(P)} = <b>${r.toFixed(2)}%</b></p>`,
+ [P/NOI,r*1.2,100-r>20?r+1.5:r-1.5]);},
+()=>{const NOI=ri(6,80)*5000,R1=rs(6,9,0.25),R2=R1+pick([0.5,0.75,1,1.25]),V1=NOI/(R1/100),V2=NOI/(R2/100),D=V1-V2;
+ return numQ('inc',`A property earns NOI of ${$0(NOI)}. If market cap rates rise from ${R1}% to ${R2}%, by how much does its value fall?`,D,'$',
+ `<p class="eq">Value at ${R1}% = ${$0(NOI)} ÷ ${dec(R1)} = ${$m(V1)}<br>Value at ${R2}% = ${$0(NOI)} ÷ ${dec(R2)} = ${$m(V2)}<br>Decrease = <b>${$m(D)}</b></p><p>Value and cap rate move in <b>opposite</b> directions.</p>`,
+ [NOI*(R2-R1)/100,V2,D*R2/R1]);},
+()=>{const g=rs(6,11,0.25),c=[0,1].map(()=>{const gi=ri(5,40)*10000,G=g+rs(-0.5,0.5,0.25);return {gi,p:Math.round(gi*G/1000)*1000};}),Gs=c.map(x=>x.p/x.gi),avg=(Gs[0]+Gs[1])/2,sg=ri(5,40)*10000,V=avg*sg;
+ return numQ('inc',`Comparable A sold for ${$0(c[0].p)} with gross income of ${$0(c[0].gi)}. Comparable B sold for ${$0(c[1].p)} with gross income of ${$0(c[1].gi)}. Using their average gross income multiplier, what is a subject with ${$0(sg)} gross income worth?`,V,'$',
+ `<p class="eq">GIM A = ${Gs[0].toFixed(2)}; GIM B = ${Gs[1].toFixed(2)}; average = ${avg.toFixed(2)}<br>Value = ${avg.toFixed(2)} × ${$0(sg)} = <b>${$m(V)}</b></p>`,
+ [sg/avg,sg*Math.max(...Gs)*1.03,sg*avg*0.9]);},
+()=>{const V=ri(40,300)*10000,R=rs(5.5,10,0.25),NOI=V*R/100;
+ return numQ('inc',`An investor will pay ${$0(V)} for an office building if it earns the market cap rate of ${R}%. What NOI must the property produce?`,NOI,'$',
+ `<p class="eq">NOI = V × R = ${$0(V)} × ${dec(R)} = <b>${$m(NOI)}</b></p>`,
+ [V/R,V*R/1000,NOI*1.15]);},
+];
+BANK.inc=[
+['The income approach is based mainly on which appraisal principle?',['Anticipation','Contribution','Change','Substitution only'],'Buyers pay for the future benefits (cash flows and resale) they expect.'],
+['What are the two steps of the income approach?',['Estimate future income, then convert it into a present value','Find comparables, then adjust them','Estimate cost, then subtract depreciation','Estimate land value, then add improvements'],'From the notes: estimate income, convert to present value.'],
+['The income approach is most appropriate for…',['Income-producing property such as apartments and shopping malls','Churches and schools','Owner-occupied single-family homes in active markets','Vacant land with no income'],'Those are the examples your notes give.'],
+['Which three techniques does the unit review list for the income approach?',['Gross income multiplier, net income capitalization and discounted cash flow','Sales comparison, cost and income','Comparative-unit, segregated-cost and quantity-survey','Age-life, breakdown and market extraction'],'DCF uses the Chapter 17 present value tools.'],
+['A gross income multiplier is calculated as…',['Sale price ÷ gross income','Net income ÷ sale price','Gross income ÷ sale price','Sale price ÷ net operating income'],'Value = GIM × the subject\'s gross income.'],
+['When is the GIM most appropriate?',['When properties have similar operating expenses','When expenses vary widely','When the property has no income','When financing is unusual'],'GIM ignores expenses, so it only works when they are similar.'],
+['What is the main weakness of the gross income multiplier?',['It ignores differences in operating expenses and vacancy','It requires a cap rate','It uses net income','It can only be used for vacant land'],'Two buildings with the same rent but different expenses get the same value.'],
+['How does net income capitalization differ from GIM analysis?',['It uses net operating income and a capitalization rate instead of gross income and a multiplier','It uses gross income and a rate','It uses construction cost','It ignores income'],'From your notes: net income, not gross; a rate, not a multiplier.'],
+['Which is NOT deducted when calculating net operating income?',['Mortgage (debt service) payments','Property taxes','Property insurance','Maintenance and repairs'],'NOI is income before financing. Debt service is what DCR compares NOI to.'],
+['Effective gross income equals…',['Potential gross income minus vacancy and collection losses (plus other income)','NOI minus operating expenses','Potential gross income plus expenses','Sale price times the cap rate'],'Then NOI = EGI − operating expenses.'],
+['If the cap rate rises while NOI stays the same, the indicated value…',['Falls','Rises','Stays the same','Doubles'],'V = NOI ÷ R. A bigger denominator means a smaller value.'],
+['If NOI rises 5% and the cap rate is unchanged, value…',['Rises 5%','Falls 5%','Is unchanged','Rises 50%'],'Value is directly proportional to NOI at a fixed cap rate.'],
+['Where does an appraiser get the capitalization rate?',['From comparable sales: each comp\'s NOI ÷ its sale price','From the mortgage interest rate','From the tax assessor','From the buyer\'s required down payment'],'From your notes: a $1M property with $100,000 NOI implies a 10% rate.'],
+['A property with $100,000 of NOI sold for $1,000,000. A similar property should produce $105,000 of NOI. Its value is…',['$1,050,000','$1,000,000','$105,000','$950,000'],'R = 10%; $105,000 ÷ 0.10 = $1,050,000 (the example in your notes).'],
+['A property with $100,000 gross income sold for $1 million. A comparable property has $9,000 of gross income. Using the GIM, its value is…',['$90,000','$900,000','$9,000','$100,000'],'GIM = 10, so value = 10 × $9,000 (the example in your notes).'],
+['A riskier income property, compared with a safer one with the same NOI, will generally have…',['A higher cap rate and a lower value','A lower cap rate and a higher value','The same value','A higher GIM'],'Investors demand more return for more risk (Chapter 17), and a higher rate means a lower value.'],
+['In reconciliation, the income approach should get the most weight for…',['An apartment complex bought as an investment','A church','A new single-family home in a busy subdivision','A vacant lot'],'Weight goes to the approach with the most reliable data for that property type.'],
+['Discounted cash flow analysis values a property by…',['Discounting each year\'s forecast cash flow and the resale price to present value','Multiplying gross income by a multiplier','Dividing one year\'s NOI by a cap rate','Adding land value to depreciated cost'],'It uses the PV tools from Chapter 17.'],
+['Which formula is direct capitalization?',['V = NOI ÷ R','V = NOI × R','V = R ÷ NOI','V = GIM ÷ gross income'],'Remember "IRV": Income = Rate × Value.'],
+['A GIM of 8 means…',['The price is 8 times the property\'s gross income','The cap rate is 8%','Expenses are 8% of income','The building is 8 years old'],'It is a multiplier, not a rate.'],
+];
 /* ===== Lessons: plain-language explanations, formula cards, worked examples ===== */
 const fc=(name,eq,vars,when,assume,mist)=>`<div class="fcard"><div class="fcard-h">${name}</div><div class="eq big">${eq}</div><dl>
 <dt>Variables</dt><dd>${vars}</dd><dt>Use it when</dt><dd>${when}</dd>${assume?`<dt>Assumes</dt><dd>${assume}</dd>`:''}<dt>Common mistakes</dt><dd>${mist}</dd></dl></div>`;
@@ -924,7 +976,31 @@ fin:`
 <p>Individual investors, life insurance companies and pension funds (long horizons), REITs (equity REITs most common; mortgage REITs about 20%), commercial banks (community under $500M, regional, money center; prefer short-term loans), CMBS, and TIF (future tax increases repay redevelopment).</p>
 ${flag('Your notes say REITs must distribute 95% of taxable income. Current U.S. law requires 90%. Go with whatever your textbook or professor says.')}`,
 
+inc:`
+<p>The <b>income approach</b> values a property by what it will earn. It rests on the <b>principle of anticipation</b>: buyers pay today for the cash flows and resale they expect in the future. Use it for income-producing property such as apartment complexes, office buildings and shopping malls.</p>
+<p class="rule">Two steps: (1) estimate the property's future income, then (2) convert that income into a present value.</p>
+<h4>From rent roll to NOI</h4>
+<table class="tbl"><tr><th>Line</th><th>What it means</th></tr>
+<tr><td>Potential gross income (PGI)</td><td>All rent if 100% leased at market rent</td></tr>
+<tr><td>− Vacancy &amp; collection loss</td><td>Empty units and tenants who don't pay</td></tr>
+<tr><td>+ Other income</td><td>Parking, laundry, fees</td></tr>
+<tr><td>= Effective gross income (EGI)</td><td>What the property actually collects</td></tr>
+<tr><td>− Operating expenses</td><td>Taxes, insurance, utilities, maintenance, management</td></tr>
+<tr><td>= <b>Net operating income (NOI)</b></td><td>Income before any mortgage payments</td></tr></table>
+<p><b>Never subtract debt service</b> (mortgage payments) to get NOI. The property's value doesn't depend on how the buyer finances it. Debt service is what the DCR in Chapter 16 compares NOI against.</p>
+<h4>The three techniques (from the unit review)</h4>
+${fc('1. Gross income multiplier (GIM)','GIM = sale price ÷ gross income &nbsp;→&nbsp; Value = GIM × subject gross income','Price and gross income from comparable sales','Quick valuation when comparable properties have <b>similar expenses</b>.','Expense and vacancy ratios are about the same across the comps.','Using it when expenses differ a lot; mixing monthly and annual income; dividing instead of multiplying for the subject.')}
+${fc('2. Net income (direct) capitalization','R = NOI ÷ price (from comps) &nbsp;→&nbsp; Value = NOI ÷ R','R = capitalization rate (as a decimal) · NOI = one year of net operating income','Income property with stable income. Uses <b>net</b> income and a <b>rate</b>, not gross income and a multiplier.','The next year\'s NOI is representative and the comps have similar risk.','Using gross income; subtracting debt service; dividing by 9 instead of 0.09; multiplying NOI by R.')}
+<p><b>3. Discounted cash flow (DCF):</b> forecast each year's cash flow and the resale price, then discount them to present value with the Chapter 17 tools. On the TI-84 this is <code>npv(</code>.</p>
+${ex('your notes',`<p><b>GIM:</b> a property with $100,000 gross income sold for $1,000,000, so GIM = 10. A property with $9,000 gross income is worth about 10 × $9,000 = <b>$90,000</b>.</p><p><b>Cap rate:</b> a $1,000,000 property with $100,000 NOI gives R = 10%. A property expected to earn $105,000 NOI is worth $105,000 ÷ 0.10 = <b>$1,050,000</b>.</p>`)}
+<h4>How value moves</h4>
+<ul><li>Higher cap rate → <b>lower</b> value. Lower cap rate → higher value. (V = NOI ÷ R)</li><li>NOI up 5% at the same cap rate → value up 5%.</li><li>Riskier property → investors demand a higher return → higher cap rate → lower value (the Chapter 17 risk-return link).</li><li>Memory aid: <b>I = R × V</b> (Income = Rate × Value). Cover the one you need.</li></ul>
+<h4>Where it fits</h4>
+<p>It is one of the three approaches applied in step 4 of the appraisal process. In reconciliation it gets the most weight for investment property. A church leans on the cost approach, and a typical home on sales comparison.</p>
+${flag('The GIM and cap-rate formulas in your notes were images that did not export. These are the standard forms and match your notes\' worked examples ($90,000 and $1,050,000). The EGI/NOI line items are standard textbook terms. Your notes only say NOI is "net income, not gross income," so check your slides if the exam asks about specific expense items.')}`,
+
 apm:`
+<p class="muted">GIM and cap-rate valuation now have their own topic: <b>Income approach</b>.</p>
 <p>Appraisers estimate value three ways, then reconcile them.</p>
 ${fc('Cost approach','Value = site value + (replacement cost − accrued depreciation)','Site value from comparable land sales · depreciation = physical + functional + economic','New or special-purpose buildings (a church) where sales data is thin.','A buyer could build a substitute.','Depreciating the land (land doesn\'t depreciate); forgetting to add the site.')}
 ${flag('Your notes\' cost approach example says $150,000 + $567,500 = $718,000. The arithmetic gives <b>$717,500</b>. The $718,000 is probably rounded. Check the textbook.')}
@@ -1040,7 +1116,7 @@ const PLAN=[
  {day:'Wed · Oct 21',sub:'About 5 hours: Ch 6, 8, 9 theory, then the 2-hour practice exam.',items:[
   ['w4','Theory: Contracts & closings (Ch 6)','k'],['w9','Key terms: Chapter 6','kt6'],
   ['w5','Theory: Brokerage & agency (Ch 8)','brk'],['w10','Key terms: Chapter 8','kt8'],
-  ['w2','Theory: Appraisal concepts (Ch 9)','apc'],['w11','Key terms: Chapter 9','kt9'],['w1','Appraisal math','apm'],
+  ['w2','Theory: Appraisal concepts (Ch 9)','apc'],['w11','Key terms: Chapter 9','kt9'],['w1','Appraisal math: cost & sales comparison','apm'],['w12','Income approach: GIM, cap rates, NOI','inc'],
   ['w6','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['w7','Review every missed question and redo similar ones','mistakes'],
   ['w8','Key-term and formula flashcards; lights out by 11 PM','formulas']]},
@@ -1147,7 +1223,7 @@ function renderTopics(){
 let P=null; // {title, qs, i, picked, done, score}
 function startPractice(kind){
   let qs=[],title='';
-  if(kind==='diag'){title='Diagnostic';qs=['lump','annuity','npv','pay','bal','points','uw','apm','k','brk'].map(id=>makeQ(id));}
+  if(kind==='diag'){title='Diagnostic';qs=['lump','annuity','npv','pay','bal','points','uw','inc','k','brk'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
@@ -1182,8 +1258,8 @@ function renderPractice(){
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
 /* exam blueprint: about two-thirds theory, one-third math, matching how the notes are weighted */
-const THEORY_SLOTS=[['kt6',4],['kt8',4],['kt9',4],['kt16',6],['kt17',3],['kt18',2],['k',5],['brk',5],['apc',5],['fin',6],['npv',1],['pay',1],['points',1],['arm',1],['uw',1]].map(([id,w])=>({id,w,mode:'theory'}));
-const MATH_SLOTS=[['lump',2],['annuity',2],['npv',2],['pay',3],['bal',3],['refi',2],['points',2],['arm',2],['uw',3],['apm',3]].map(([id,w])=>({id,w,mode:'math'}));
+const THEORY_SLOTS=[['kt6',4],['kt8',4],['kt9',4],['kt16',6],['kt17',3],['kt18',2],['k',5],['brk',5],['apc',5],['fin',6],['npv',1],['pay',1],['points',1],['arm',1],['uw',1],['inc',2]].map(([id,w])=>({id,w,mode:'theory'}));
+const MATH_SLOTS=[['lump',2],['annuity',2],['npv',2],['pay',3],['bal',3],['refi',2],['points',2],['arm',2],['uw',3],['apm',2],['inc',2]].map(([id,w])=>({id,w,mode:'math'}));
 function dedupe(arr,fn){const seen=new Set();return arr.map(()=>{let q,t=0;do{q=fn();}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);return q;});}
 function buildSet(n,slots){
   const tot=slots.reduce((a,b)=>a+b.w,0);

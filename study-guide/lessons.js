@@ -109,7 +109,31 @@ fin:`
 <p>Individual investors, life insurance companies and pension funds (long horizons), REITs (equity REITs most common; mortgage REITs about 20%), commercial banks (community under $500M, regional, money center; prefer short-term loans), CMBS, and TIF (future tax increases repay redevelopment).</p>
 ${flag('Your notes say REITs must distribute 95% of taxable income. Current U.S. law requires 90%. Go with whatever your textbook or professor says.')}`,
 
+inc:`
+<p>The <b>income approach</b> values a property by what it will earn. It rests on the <b>principle of anticipation</b>: buyers pay today for the cash flows and resale they expect in the future. Use it for income-producing property such as apartment complexes, office buildings and shopping malls.</p>
+<p class="rule">Two steps: (1) estimate the property's future income, then (2) convert that income into a present value.</p>
+<h4>From rent roll to NOI</h4>
+<table class="tbl"><tr><th>Line</th><th>What it means</th></tr>
+<tr><td>Potential gross income (PGI)</td><td>All rent if 100% leased at market rent</td></tr>
+<tr><td>− Vacancy &amp; collection loss</td><td>Empty units and tenants who don't pay</td></tr>
+<tr><td>+ Other income</td><td>Parking, laundry, fees</td></tr>
+<tr><td>= Effective gross income (EGI)</td><td>What the property actually collects</td></tr>
+<tr><td>− Operating expenses</td><td>Taxes, insurance, utilities, maintenance, management</td></tr>
+<tr><td>= <b>Net operating income (NOI)</b></td><td>Income before any mortgage payments</td></tr></table>
+<p><b>Never subtract debt service</b> (mortgage payments) to get NOI. The property's value doesn't depend on how the buyer finances it. Debt service is what the DCR in Chapter 16 compares NOI against.</p>
+<h4>The three techniques (from the unit review)</h4>
+${fc('1. Gross income multiplier (GIM)','GIM = sale price ÷ gross income &nbsp;→&nbsp; Value = GIM × subject gross income','Price and gross income from comparable sales','Quick valuation when comparable properties have <b>similar expenses</b>.','Expense and vacancy ratios are about the same across the comps.','Using it when expenses differ a lot; mixing monthly and annual income; dividing instead of multiplying for the subject.')}
+${fc('2. Net income (direct) capitalization','R = NOI ÷ price (from comps) &nbsp;→&nbsp; Value = NOI ÷ R','R = capitalization rate (as a decimal) · NOI = one year of net operating income','Income property with stable income. Uses <b>net</b> income and a <b>rate</b>, not gross income and a multiplier.','The next year\'s NOI is representative and the comps have similar risk.','Using gross income; subtracting debt service; dividing by 9 instead of 0.09; multiplying NOI by R.')}
+<p><b>3. Discounted cash flow (DCF):</b> forecast each year's cash flow and the resale price, then discount them to present value with the Chapter 17 tools. On the TI-84 this is <code>npv(</code>.</p>
+${ex('your notes',`<p><b>GIM:</b> a property with $100,000 gross income sold for $1,000,000, so GIM = 10. A property with $9,000 gross income is worth about 10 × $9,000 = <b>$90,000</b>.</p><p><b>Cap rate:</b> a $1,000,000 property with $100,000 NOI gives R = 10%. A property expected to earn $105,000 NOI is worth $105,000 ÷ 0.10 = <b>$1,050,000</b>.</p>`)}
+<h4>How value moves</h4>
+<ul><li>Higher cap rate → <b>lower</b> value. Lower cap rate → higher value. (V = NOI ÷ R)</li><li>NOI up 5% at the same cap rate → value up 5%.</li><li>Riskier property → investors demand a higher return → higher cap rate → lower value (the Chapter 17 risk-return link).</li><li>Memory aid: <b>I = R × V</b> (Income = Rate × Value). Cover the one you need.</li></ul>
+<h4>Where it fits</h4>
+<p>It is one of the three approaches applied in step 4 of the appraisal process. In reconciliation it gets the most weight for investment property. A church leans on the cost approach, and a typical home on sales comparison.</p>
+${flag('The GIM and cap-rate formulas in your notes were images that did not export. These are the standard forms and match your notes\' worked examples ($90,000 and $1,050,000). The EGI/NOI line items are standard textbook terms. Your notes only say NOI is "net income, not gross income," so check your slides if the exam asks about specific expense items.')}`,
+
 apm:`
+<p class="muted">GIM and cap-rate valuation now have their own topic: <b>Income approach</b>.</p>
 <p>Appraisers estimate value three ways, then reconcile them.</p>
 ${fc('Cost approach','Value = site value + (replacement cost − accrued depreciation)','Site value from comparable land sales · depreciation = physical + functional + economic','New or special-purpose buildings (a church) where sales data is thin.','A buyer could build a substitute.','Depreciating the land (land doesn\'t depreciate); forgetting to add the site.')}
 ${flag('Your notes\' cost approach example says $150,000 + $567,500 = $718,000. The arithmetic gives <b>$717,500</b>. The $718,000 is probably rounded. Check the textbook.')}
