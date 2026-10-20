@@ -39,10 +39,10 @@ const TOPICS=[
  {id:'arm',unit:'Ch 18',name:'Two-step mortgages & ARMs',quant:true},
  {id:'uw',unit:'Ch 16',name:'Underwriting ratios: MDR, TDR, LTV, DCR',quant:true},
  {id:'fin',unit:'Ch 16',name:'Mortgage law, markets & regulation',quant:false},
- {id:'apm',unit:'Unit 9',name:'Appraisal math',quant:true},
- {id:'apc',unit:'Unit 9',name:'Appraisal concepts',quant:false},
- {id:'k',unit:'Unit 6',name:'Contracts & closings',quant:false},
- {id:'brk',unit:'Unit 8',name:'Brokerage & agency',quant:false},
+ {id:'apm',unit:'Ch 9',name:'Appraisal math',quant:true},
+ {id:'apc',unit:'Ch 9',name:'Appraisal concepts',quant:false},
+ {id:'k',unit:'Ch 6',name:'Contracts & closings',quant:false},
+ {id:'brk',unit:'Ch 8',name:'Brokerage & agency',quant:false},
 ];
 const TOPIC=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
 

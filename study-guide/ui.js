@@ -19,10 +19,10 @@ const PLAN=[
   ['t6','Underwriting ratios: MDR, TDR, LTV, DCR','uw'],
   ['t7','10-question set on your weakest topics','weak'],
   ['t8','Flip through the formula flashcards once','formulas']]},
- {day:'Wed · Oct 21',sub:'About 4.5 hours. Practice exam in the evening.',items:[
+ {day:'Wed · Oct 21',sub:'About 5 hours, including the 2-hour practice exam in the evening.',items:[
   ['w1','Appraisal math','apm'],['w2','Appraisal concepts','apc'],
   ['w3','Mortgage law, markets & regulation','fin'],['w4','Contracts & closings','k'],['w5','Brokerage & agency','brk'],
-  ['w6','Timed practice exam: 30 questions, 60 minutes','exam'],
+  ['w6','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['w7','Review every missed question and redo similar ones','mistakes'],
   ['w8','Formula flashcards from memory; lights out by 11 PM',null]]},
  {day:'Thu · Oct 22',sub:'Exam at 1:00 PM.',items:[
@@ -70,7 +70,7 @@ function record(q,given){
   const ok=given===q.answer;
   (S.att[q.topic]=S.att[q.topic]||[]).push(ok?1:0);
   if(S.att[q.topic].length>20)S.att[q.topic]=S.att[q.topic].slice(-20);
-  if(!ok){S.mistakes.unshift({topic:q.topic,prompt:q.prompt,given:given==null?'(no answer)':q.choices[given],right:q.choices[q.answer],sol:q.sol,t:Date.now()});S.mistakes=S.mistakes.slice(0,40);}
+  if(!ok){S.mistakes.unshift({topic:q.topic,prompt:q.prompt,given:given==null?'(no answer)':q.choices[given],right:q.choices[q.answer],sol:q.sol,t:Date.now()});S.mistakes=S.mistakes.slice(0,80);}
   return ok;}
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -159,10 +159,15 @@ function renderPractice(){
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
 function startExam(n,mins){
-  const base=['lump','annuity','npv','pay','bal','refi','points','arm','uw','fin','apm','apc','k','brk'];
-  const extra=['pay','bal','points','uw','apm','npv','annuity','fin','k','brk','apc','fin','k','brk','uw','apc'];
-  const ids=base.concat(extra).slice(0,n);
-  E={qs:shuffle(ids.map(makeQ)),picks:{},end:Date.now()+mins*60000,mins,submitted:false};
+  // weight each topic by how much of the six chapters it covers, then split n questions by largest remainder
+  const W={lump:4,annuity:4,npv:5,pay:5,bal:5,refi:3,points:4,arm:3,uw:5,fin:6,apm:4,apc:5,k:6,brk:6};
+  const tot=Object.values(W).reduce((a,b)=>a+b,0);
+  const alloc=Object.entries(W).map(([id,w])=>({id,c:Math.floor(n*w/tot),r:n*w/tot%1}));
+  let left=n-alloc.reduce((a,b)=>a+b.c,0);
+  alloc.slice().sort((a,b)=>b.r-a.r).slice(0,left).forEach(a=>a.c++);
+  const seen=new Set(),qs=[];
+  alloc.forEach(a=>{for(let k=0;k<a.c;k++){let q,tries=0;do{q=makeQ(a.id);}while(seen.has(q.prompt)&&++tries<30);seen.add(q.prompt);qs.push(q);}});
+  E={qs:shuffle(qs),picks:{},end:Date.now()+mins*60000,mins,submitted:false};
   go('exam');
 }
 let examTimer=null;
@@ -171,8 +176,8 @@ function renderExam(){
   clearInterval(examTimer);
   if(!E){
     const past=S.exams.slice(0,5);
-    el.innerHTML=`<div class="intro"><p>Simulates the real thing: multiple choice, no formulas, TI-84 only, no feedback until you submit. Have paper and your calculator ready.</p></div>
-    <div class="starts"><button class="start" data-exam="30,60"><b>Full practice exam</b><span>30 questions · 60 minutes</span></button><button class="start" data-exam="15,30"><b>Half exam</b><span>15 questions · 30 minutes</span></button></div>
+    el.innerHTML=`<div class="intro"><p>Simulates the real thing: multiple choice, no formulas, TI-84 only, no feedback until you submit. Questions are spread across all six chapters in proportion to how much of the material each covers, with no repeated concept questions. Have paper and your calculator ready.</p></div>
+    <div class="starts"><button class="start" data-exam="60,120"><b>Full practice exam</b><span>60 questions · 120 minutes</span></button><button class="start" data-exam="75,150"><b>Extended practice exam</b><span>75 questions · 150 minutes</span></button></div>
     ${past.length?`<h3 class="h-sub">Past attempts</h3><table class="tbl"><tr><th>When</th><th>Score</th><th>Time used</th></tr>${past.map(x=>`<tr><td>${new Date(x.t).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}</td><td>${x.score}/${x.n} (${Math.round(x.score/x.n*100)}%)</td><td>${x.used} min</td></tr>`).join('')}</table>`:''}`;
     return;}
   const answered=Object.keys(E.picks).length;
