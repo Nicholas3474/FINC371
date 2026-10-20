@@ -29,21 +29,28 @@ function tvm(o){
 const tiLine=(s)=>`<div class="keys"><span class="keys-h">TI-84</span>${s}</div>`;
 
 const TOPICS=[
+ {id:'k',unit:'Ch 6',name:'Contracts & closings',quant:false},
+ {id:'kt6',unit:'Ch 6',name:'Key terms: contracts & closings',quant:false,kt:6},
+ {id:'brk',unit:'Ch 8',name:'Brokerage & agency',quant:false},
+ {id:'kt8',unit:'Ch 8',name:'Key terms: brokerage',quant:false,kt:8},
+ {id:'apc',unit:'Ch 9',name:'Appraisal concepts',quant:false},
+ {id:'apm',unit:'Ch 9',name:'Appraisal math',quant:true},
+ {id:'kt9',unit:'Ch 9',name:'Key terms: appraisal',quant:false,kt:9},
+ {id:'fin',unit:'Ch 16',name:'Mortgage law, markets & regulation',quant:false},
+ {id:'uw',unit:'Ch 16',name:'Underwriting ratios: MDR, TDR, LTV, DCR',quant:true},
+ {id:'kt16',unit:'Ch 16',name:'Key terms: financing',quant:false,kt:16},
  {id:'lump',unit:'Ch 17',name:'Lump sums & compounding',quant:true},
  {id:'annuity',unit:'Ch 17',name:'Annuities & sinking funds',quant:true},
  {id:'npv',unit:'Ch 17',name:'NPV, IRR & risk',quant:true},
+ {id:'kt17',unit:'Ch 17',name:'Key terms: risk, return & TVM',quant:false,kt:17},
  {id:'pay',unit:'Ch 18',name:'Mortgage payments & amortization',quant:true},
  {id:'bal',unit:'Ch 18',name:'Loan balances, interest & principal',quant:true},
  {id:'refi',unit:'Ch 18',name:'Refinancing',quant:true},
  {id:'points',unit:'Ch 18',name:'Points & effective interest rate',quant:true},
  {id:'arm',unit:'Ch 18',name:'Two-step mortgages & ARMs',quant:true},
- {id:'uw',unit:'Ch 16',name:'Underwriting ratios: MDR, TDR, LTV, DCR',quant:true},
- {id:'fin',unit:'Ch 16',name:'Mortgage law, markets & regulation',quant:false},
- {id:'apm',unit:'Ch 9',name:'Appraisal math',quant:true},
- {id:'apc',unit:'Ch 9',name:'Appraisal concepts',quant:false},
- {id:'k',unit:'Ch 6',name:'Contracts & closings',quant:false},
- {id:'brk',unit:'Ch 8',name:'Brokerage & agency',quant:false},
+ {id:'kt18',unit:'Ch 18',name:'Key terms: mortgage mechanics',quant:false,kt:18},
 ];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const TOPIC=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
 
 /* Build a multiple-choice question from a numeric answer plus mistake-based distractors */
@@ -442,9 +449,13 @@ brk:[
 ],
 };
 
-function makeQ(topic){
-  const g=GEN[topic]||[],b=BANK[topic]||[];
-  const useNum=g.length&&(b.length===0||Math.random()<(TOPIC[topic].quant?0.75:0.25));
+function makeQ(topic,mode){
+  const g=GEN[topic]||[],b=BANK[topic]||[],T=TOPIC[topic];
+  let useNum;
+  if(T.kt)useNum=true;
+  else if(mode==='theory')useNum=!b.length;
+  else if(mode==='math')useNum=g.length>0;
+  else useNum=g.length&&(b.length===0||Math.random()<(T.quant?0.5:0.15));
   return useNum?pick(g)():mcQ(topic,pick(b));
 }
 

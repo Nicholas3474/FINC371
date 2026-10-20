@@ -10,21 +10,24 @@ const PLAN=[
   ['m3','Lesson + practice: Annuities & sinking funds','annuity'],
   ['m4','Lesson + practice: NPV, IRR & risk','npv'],
   ['m5','TI-84: open the TVM Solver, set P/Y and C/Y, practice npv( and irr(',null]]},
- {day:'Tue · Oct 20',sub:'About 4 hours, with a break every 50 minutes.',items:[
+ {day:'Tue · Oct 20',sub:'About 4.5 hours: Ch 16 theory plus the Ch 18 math. Break every 50 minutes.',items:[
+  ['t9','Theory: Mortgage law, markets & regulation (Ch 16)','fin'],
+  ['t10','Key terms: Chapter 16 (flashcards, then practice)','kt16'],
+  ['t6','Underwriting ratios: MDR, TDR, LTV, DCR','uw'],
   ['t1','Mortgage payments & amortization','pay'],
   ['t2','Loan balances, interest & principal (bal, ΣPrn, ΣInt)','bal'],
   ['t3','Refinancing','refi'],
   ['t4','Points & effective interest rate','points'],
   ['t5','Two-step mortgages & ARMs','arm'],
-  ['t6','Underwriting ratios: MDR, TDR, LTV, DCR','uw'],
-  ['t7','10-question set on your weakest topics','weak'],
-  ['t8','Flip through the formula flashcards once','formulas']]},
- {day:'Wed · Oct 21',sub:'About 5 hours, including the 2-hour practice exam in the evening.',items:[
-  ['w1','Appraisal math','apm'],['w2','Appraisal concepts','apc'],
-  ['w3','Mortgage law, markets & regulation','fin'],['w4','Contracts & closings','k'],['w5','Brokerage & agency','brk'],
+  ['t11','Key terms: Chapters 17 and 18','kt17'],
+  ['t12','15-question theory set','theory']]},
+ {day:'Wed · Oct 21',sub:'About 5 hours: Ch 6, 8, 9 theory, then the 2-hour practice exam.',items:[
+  ['w4','Theory: Contracts & closings (Ch 6)','k'],['w9','Key terms: Chapter 6','kt6'],
+  ['w5','Theory: Brokerage & agency (Ch 8)','brk'],['w10','Key terms: Chapter 8','kt8'],
+  ['w2','Theory: Appraisal concepts (Ch 9)','apc'],['w11','Key terms: Chapter 9','kt9'],['w1','Appraisal math','apm'],
   ['w6','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['w7','Review every missed question and redo similar ones','mistakes'],
-  ['w8','Formula flashcards from memory; lights out by 11 PM',null]]},
+  ['w8','Key-term and formula flashcards; lights out by 11 PM','formulas']]},
  {day:'Thu · Oct 22',sub:'Exam at 1:00 PM.',items:[
   ['h1','9:00–10:15 · Practice whatever is not yet exam-ready','weak'],
   ['h2','10:15–10:45 · Write every formula from memory, check against the flashcards','formulas'],
@@ -73,7 +76,6 @@ function record(q,given){
   if(!ok){S.mistakes.unshift({topic:q.topic,prompt:q.prompt,given:given==null?'(no answer)':q.choices[given],right:q.choices[q.answer],sol:q.sol,t:Date.now()});S.mistakes=S.mistakes.slice(0,80);}
   return ok;}
 
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const chip=st=>`<span class="chip chip-${st}">${STATUS.find(x=>x.k===st).label}</span>`;
 
 /* ---------- header ---------- */
@@ -88,6 +90,9 @@ function renderHeader(){
   document.getElementById('meter-legend').innerHTML=STATUS.map(s=>`<span><i class="dot dot-${s.k}"></i>${s.label} <b>${counts[s.k]}</b></span>`).join('');
 }
 setInterval(renderHeader,30000);
+
+/* key-term lessons are built from the notes' own glossary */
+[6,8,9,16,17,18].forEach(ch=>{LESSONS['kt'+ch]=`<p>Every key term from the Chapter ${ch} list in your notes, word for word. Read each one, cover the definition and say it back, then practice. Questions go both ways: definition → term, and term → definition.</p><dl class="gloss">${TERMS.filter(t=>t.c===ch).map(t=>`<dt>${esc(t.t)}</dt><dd>${esc(t.d)}</dd>`).join('')}</dl>`;});
 
 /* ---------- tabs ---------- */
 let tab='plan';
@@ -126,10 +131,11 @@ function renderTopics(){
 let P=null; // {title, qs, i, picked, done, score}
 function startPractice(kind){
   let qs=[],title='';
-  if(kind==='diag'){title='Diagnostic';qs=['lump','annuity','npv','pay','bal','points','uw','apm','k','brk'].map(makeQ);}
+  if(kind==='diag'){title='Diagnostic';qs=['lump','annuity','npv','pay','bal','points','uw','apm','k','brk'].map(id=>makeQ(id));}
+  else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
-  else {title=TOPIC[kind].name;qs=Array.from({length:8},()=>makeQ(kind));}
+  else {title=TOPIC[kind].name;qs=dedupe(Array.from({length:8}),()=>makeQ(kind));}
   P={title,qs,i:0,picked:null,done:false,score:0,kind};
   go('practice');
 }
@@ -144,6 +150,7 @@ function renderPractice(){
   const el=document.getElementById('p-practice');
   if(!P){
     el.innerHTML=`<div class="starts"><button class="start" data-start="diag"><b>Diagnostic</b><span>10 questions, one per major topic. Start here.</span></button>
+    <button class="start" data-start="theory"><b>Theory mix</b><span>15 concept and key-term questions from all six chapters. No math.</span></button>
     <button class="start" data-start="weak"><b>Weakest topics</b><span>10 questions weighted toward topics that aren't exam-ready.</span></button></div>
     <h3 class="h-sub">Or pick one topic (8 questions)</h3><div class="topic-grid">${TOPICS.map(t=>`<button class="tpick" data-start="${t.id}"><span>${t.name}</span>${chip(status(t.id))}</button>`).join('')}</div>`;
     return;}
@@ -158,16 +165,21 @@ function renderPractice(){
 
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
-function startExam(n,mins){
-  // weight each topic by how much of the six chapters it covers, then split n questions by largest remainder
-  const W={lump:4,annuity:4,npv:5,pay:5,bal:5,refi:3,points:4,arm:3,uw:5,fin:6,apm:4,apc:5,k:6,brk:6};
-  const tot=Object.values(W).reduce((a,b)=>a+b,0);
-  const alloc=Object.entries(W).map(([id,w])=>({id,c:Math.floor(n*w/tot),r:n*w/tot%1}));
-  let left=n-alloc.reduce((a,b)=>a+b.c,0);
+/* exam blueprint: about two-thirds theory, one-third math, matching how the notes are weighted */
+const THEORY_SLOTS=[['kt6',4],['kt8',4],['kt9',4],['kt16',6],['kt17',3],['kt18',2],['k',5],['brk',5],['apc',5],['fin',6],['npv',1],['pay',1],['points',1],['arm',1],['uw',1]].map(([id,w])=>({id,w,mode:'theory'}));
+const MATH_SLOTS=[['lump',2],['annuity',2],['npv',2],['pay',3],['bal',3],['refi',2],['points',2],['arm',2],['uw',3],['apm',3]].map(([id,w])=>({id,w,mode:'math'}));
+function dedupe(arr,fn){const seen=new Set();return arr.map(()=>{let q,t=0;do{q=fn();}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);return q;});}
+function buildSet(n,slots){
+  const tot=slots.reduce((a,b)=>a+b.w,0);
+  const alloc=slots.map(x=>({...x,c:Math.floor(n*x.w/tot),r:n*x.w/tot%1}));
+  const left=n-alloc.reduce((a,b)=>a+b.c,0);
   alloc.slice().sort((a,b)=>b.r-a.r).slice(0,left).forEach(a=>a.c++);
   const seen=new Set(),qs=[];
-  alloc.forEach(a=>{for(let k=0;k<a.c;k++){let q,tries=0;do{q=makeQ(a.id);}while(seen.has(q.prompt)&&++tries<30);seen.add(q.prompt);qs.push(q);}});
-  E={qs:shuffle(qs),picks:{},end:Date.now()+mins*60000,mins,submitted:false};
+  alloc.forEach(a=>{for(let k=0;k<a.c;k++){let q,t=0;do{q=makeQ(a.id,a.mode);}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);qs.push(q);}});
+  return shuffle(qs);
+}
+function startExam(n,mins,kind){
+  E={qs:buildSet(n,kind==='theory'?THEORY_SLOTS:THEORY_SLOTS.concat(MATH_SLOTS)),picks:{},end:Date.now()+mins*60000,mins,submitted:false};
   go('exam');
 }
 let examTimer=null;
@@ -176,8 +188,8 @@ function renderExam(){
   clearInterval(examTimer);
   if(!E){
     const past=S.exams.slice(0,5);
-    el.innerHTML=`<div class="intro"><p>Simulates the real thing: multiple choice, no formulas, TI-84 only, no feedback until you submit. Questions are spread across all six chapters in proportion to how much of the material each covers, with no repeated concept questions. Have paper and your calculator ready.</p></div>
-    <div class="starts"><button class="start" data-exam="60,120"><b>Full practice exam</b><span>60 questions · 120 minutes</span></button><button class="start" data-exam="75,150"><b>Extended practice exam</b><span>75 questions · 150 minutes</span></button></div>
+    el.innerHTML=`<div class="intro"><p>Simulates the real thing: multiple choice, no formulas, TI-84 only, no feedback until you submit. Mixed exams are about two-thirds theory (concepts and key terms from all six chapters) and one-third math, with no repeated questions or terms. Have paper and your calculator ready.</p></div>
+    <div class="starts"><button class="start" data-exam="60,120"><b>Full practice exam</b><span>60 questions · 120 minutes</span></button><button class="start" data-exam="75,150"><b>Extended practice exam</b><span>75 questions · 150 minutes</span></button><button class="start" data-exam="60,75,theory"><b>Theory exam</b><span>60 concept and key-term questions · 75 minutes · no math</span></button></div>
     ${past.length?`<h3 class="h-sub">Past attempts</h3><table class="tbl"><tr><th>When</th><th>Score</th><th>Time used</th></tr>${past.map(x=>`<tr><td>${new Date(x.t).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}</td><td>${x.score}/${x.n} (${Math.round(x.score/x.n*100)}%)</td><td>${x.used} min</td></tr>`).join('')}</table>`:''}`;
     return;}
   const answered=Object.keys(E.picks).length;
@@ -214,13 +226,17 @@ function renderMistakes(){
 }
 
 /* ---------- formulas ---------- */
-let flipped={},showAll=false;
+let flipped={},showAll=false,fcMode='terms',fcCh=6;
 function renderFormulas(){
   const el=document.getElementById('p-formulas');
-  el.innerHTML=`<div class="intro"><p>No formula sheet on the exam, so these have to come from memory. Read the prompt, say or write the formula, then tap to check.</p>
-  <div class="btns"><button class="btn ghost" data-shuffle>Shuffle cards</button><button class="btn ghost" data-showall>${showAll?'Hide all answers':'Show all answers'}</button></div></div>
-  <div class="cards">${FORMULAS.map((f,i)=>{const open=showAll||flipped[i];return `<button class="card ${open?'flip':''}" data-card="${i}"><span class="card-name">${f[0]}</span><span class="card-when">${f[1]}</span><span class="card-eq">${open?f[2]:'Tap to reveal'}</span></button>`;}).join('')}</div>`;
+  const cards=fcMode==='formulas'?FORMULAS.map(f=>({name:f[0],when:f[1],back:f[2],mono:true})):TERMS.filter(t=>t.c===fcCh).map(t=>({name:t.t,when:'Chapter '+t.c,back:esc(t.d)}));
+  el.innerHTML=`<div class="intro"><p>No formula sheet on the exam, so all of this has to come from memory. Say the definition or formula out loud, then tap the card to check.</p>
+  <div class="seg-ctl" role="group" aria-label="Card set"><button class="${fcMode==='terms'?'on':''}" data-fcmode="terms">Key terms</button><button class="${fcMode==='formulas'?'on':''}" data-fcmode="formulas">Formulas</button></div>
+  ${fcMode==='terms'?`<div class="seg-ctl" role="group" aria-label="Chapter">${[6,8,9,16,17,18].map(c=>`<button class="${fcCh===c?'on':''}" data-fcch="${c}">Ch ${c}</button>`).join('')}</div>`:''}
+  <div class="btns"><button class="btn ghost" data-shuffle>Shuffle</button><button class="btn ghost" data-showall>${showAll?'Hide all answers':'Show all answers'}</button><span class="muted">${cards.length} cards</span></div></div>
+  <div class="cards">${(fcOrder&&fcOrder.length===cards.length?fcOrder.map(i=>cards[i]):cards).map((c,j)=>{const i=fcOrder&&fcOrder.length===cards.length?fcOrder[j]:j;const open=showAll||flipped[i];return `<button class="card ${open?'flip':''} ${c.mono?'':'card-term'}" data-card="${i}"><span class="card-name">${esc(c.name)}</span><span class="card-when">${c.when}</span><span class="card-eq">${open?c.back:'Tap to reveal'}</span></button>`;}).join('')}</div>`;
 }
+let fcOrder=null;
 
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
@@ -228,18 +244,20 @@ document.addEventListener('click',e=>{
   const d=b.dataset;
   if(d.tab){location.hash=d.tab;go(d.tab);}
   else if(d.go){if(TOPIC[d.go]){openTopic=d.go;if(!S.read[d.go]){S.read[d.go]=1;save();renderHeader();}go('topics');setTimeout(()=>{const t=document.getElementById('topic-'+d.go);t&&t.scrollIntoView({block:'start'});},0);}
-    else if(d.go==='diag'||d.go==='weak')startPractice(d.go);else if(d.go==='exam'){E=null;go('exam');}else go(d.go);}
+    else if(d.go==='diag'||d.go==='weak'||d.go==='theory')startPractice(d.go);else if(d.go==='exam'){E=null;go('exam');}else go(d.go);}
   else if(d.topic){openTopic=openTopic===d.topic?null:d.topic;if(openTopic&&!S.read[openTopic]){S.read[openTopic]=1;save();renderHeader();}renderTopics();if(openTopic){const t=document.getElementById('topic-'+openTopic);t&&t.scrollIntoView({block:'start'});}}
   else if(d.practice||d.start)startPractice(d.practice||d.start);
   else if('check' in d){const q=P.qs[P.i];P.checked=true;if(record(q,P.picked))P.score++;save();renderHeader();renderPractice();}
   else if('next' in d){P.i++;P.picked=null;P.checked=false;if(P.i>=P.qs.length)P.done=true;renderPractice();window.scrollTo(0,0);}
   else if('resetPractice' in d){P=null;renderPractice();}
-  else if(d.exam){const [n,m]=d.exam.split(',').map(Number);startExam(n,m);}
+  else if(d.exam){const [n,m,k]=d.exam.split(',');startExam(+n,+m,k);}
   else if('submit' in d)submitExam();
   else if('examNew' in d){E=null;renderExam();}
   else if(d.dismiss!=null&&d.dismiss!==''){S.mistakes.splice(+d.dismiss,1);save();renderMistakes();}
   else if(d.card!=null){flipped[d.card]=!flipped[d.card];renderFormulas();}
-  else if('shuffle' in d){const s=shuffle(FORMULAS);FORMULAS.splice(0,FORMULAS.length,...s);flipped={};renderFormulas();}
+  else if('shuffle' in d){const n=fcMode==='formulas'?FORMULAS.length:TERMS.filter(t=>t.c===fcCh).length;fcOrder=shuffle([...Array(n).keys()]);flipped={};renderFormulas();}
+  else if(d.fcmode){fcMode=d.fcmode;fcOrder=null;flipped={};renderFormulas();}
+  else if(d.fcch){fcCh=+d.fcch;fcOrder=null;flipped={};renderFormulas();}
   else if('showall' in d){showAll=!showAll;renderFormulas();}
 });
 document.addEventListener('change',e=>{

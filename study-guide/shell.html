@@ -147,6 +147,14 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
 .empty{text-align:left;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:24px}
 
 /* flashcards */
+.seg-ctl{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}
+.seg-ctl button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px}
+.seg-ctl button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.card-term .card-eq{font-family:var(--body);font-size:15px}
+.gloss{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:8px 16px;margin:12px 0}
+.gloss dt{font-weight:700}.gloss dd{margin:0;min-width:0;color:var(--ink)}
+@media (max-width:560px){.gloss{grid-template-columns:1fr}.gloss dd{margin-bottom:8px}}
+.def{display:block;margin-top:8px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--accent-soft);font-size:16px}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
 .card{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;min-height:130px}
 .card-name{font:700 18px var(--display);font-stretch:85%}
@@ -169,7 +177,7 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
   <button class="tab" role="tab" data-tab="practice">Practice</button>
   <button class="tab" role="tab" data-tab="exam">Practice exam</button>
   <button class="tab" role="tab" data-tab="mistakes">Mistakes</button>
-  <button class="tab" role="tab" data-tab="formulas">Formula drill</button>
+  <button class="tab" role="tab" data-tab="formulas">Flashcards</button>
 </div></nav>
 <main class="wrap">
   <section class="panel" id="p-plan"></section>
