@@ -98,7 +98,7 @@ setInterval(renderHeader,30000);
 let tab='plan';
 try{const h=location.hash.replace('#','');if(h)tab=h;}catch(e){}
 function go(t){tab=t;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!=='p-'+t);renderPanel(t);window.scrollTo(0,0);}
-function renderPanel(t){({plan:renderPlan,topics:renderTopics,practice:renderPractice,exam:renderExam,mistakes:renderMistakes,formulas:renderFormulas}[t]||renderPlan)();}
+function renderPanel(t){({plan:renderPlan,topics:renderTopics,facts:renderFacts,practice:renderPractice,exam:renderExam,mistakes:renderMistakes,formulas:renderFormulas}[t]||renderPlan)();}
 function renderAll(){renderHeader();renderPanel(tab);}
 
 /* ---------- plan ---------- */
@@ -238,6 +238,12 @@ function renderFormulas(){
 }
 let fcOrder=null;
 
+/* ---------- key facts ---------- */
+function renderFacts(){
+  document.getElementById('p-facts').innerHTML=`<div class="intro"><p>Every specific number, date, name and example in your notes, by chapter. These are the details multiple-choice questions like to test. Read them once now and once more right before the exam.</p></div>`+
+  FACTS.map(g=>`<section class="facts"><h3>${g.title}<span>Ch ${g.ch}</span></h3><dl>${g.items.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>`).join('');
+}
+
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -267,4 +273,4 @@ document.addEventListener('change',e=>{
   else if(t.name&&t.name.startsWith('ex')&&E&&!E.submitted){E.picks[+t.name.slice(2)]=+t.value;const bar=document.querySelector('.exam-bar span:nth-child(2)');if(bar)bar.textContent=`${Object.keys(E.picks).length}/${E.qs.length} answered`;
     t.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o.querySelector('input').checked));}
 });
-renderAll();go(['plan','topics','practice','exam','mistakes','formulas'].includes(tab)?tab:'plan');
+renderAll();go(['plan','topics','facts','practice','exam','mistakes','formulas'].includes(tab)?tab:'plan');

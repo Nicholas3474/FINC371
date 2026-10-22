@@ -146,6 +146,13 @@ main{padding-block:22px 64px}
 details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom:6px}
 .empty{text-align:left;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:24px}
 
+/* key facts */
+.facts{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.facts h3{font-size:22px;display:flex;gap:10px;align-items:baseline}.facts h3 span{font:600 13px var(--mono);color:var(--muted)}
+.facts dl{display:grid;grid-template-columns:minmax(130px,190px) 1fr;gap:0;margin:10px 0 0}
+.facts dt,.facts dd{padding:8px 0;border-top:1px solid var(--line);margin:0}
+.facts dt{font-weight:700;padding-right:12px}.facts dd{min-width:0}
+@media (max-width:560px){.facts dl{grid-template-columns:1fr}.facts dd{border-top:0;padding-top:0}}
 /* flashcards */
 .seg-ctl{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}
 .seg-ctl button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px}
@@ -174,6 +181,7 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
 <nav class="tabs" aria-label="Sections"><div class="wrap" role="tablist">
   <button class="tab" role="tab" data-tab="plan">Plan</button>
   <button class="tab" role="tab" data-tab="topics">Topics &amp; lessons</button>
+  <button class="tab" role="tab" data-tab="facts">Key facts</button>
   <button class="tab" role="tab" data-tab="practice">Practice</button>
   <button class="tab" role="tab" data-tab="exam">Practice exam</button>
   <button class="tab" role="tab" data-tab="mistakes">Mistakes</button>
@@ -182,6 +190,7 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
 <main class="wrap">
   <section class="panel" id="p-plan"></section>
   <section class="panel" id="p-topics" hidden></section>
+  <section class="panel" id="p-facts" hidden></section>
   <section class="panel" id="p-practice" hidden></section>
   <section class="panel" id="p-exam" hidden></section>
   <section class="panel" id="p-mistakes" hidden></section>
