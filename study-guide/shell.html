@@ -153,6 +153,19 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
 .facts dt,.facts dd{padding:8px 0;border-top:1px solid var(--line);margin:0}
 .facts dt{font-weight:700;padding-right:12px}.facts dd{min-width:0}
 @media (max-width:560px){.facts dl{grid-template-columns:1fr}.facts dd{border-top:0;padding-top:0}}
+/* games */
+.g-grid{margin-top:10px}.g-lists{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-top:10px}
+.g-tag{font:600 11px var(--mono);color:var(--muted);white-space:nowrap}
+.g-terms{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.g-chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-weight:600;text-align:left}
+.g-defs{display:flex;flex-direction:column;gap:8px}
+.g-def{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-align:left;font-size:15px}
+.g-sel{border-color:var(--accent);background:var(--accent-soft)}
+.g-ok{border-color:var(--er);background:var(--ok-soft);color:var(--ink)}
+.g-bad{border-color:var(--bad);background:var(--bad-soft)}
+.g-miss{border-style:dashed;border-color:var(--er);color:var(--er)}
+.g-chip[disabled],.g-def[disabled]{cursor:default}
+.g-order{margin:8px 0;padding-left:22px}.g-order li{padding:3px 0;font-weight:600}
 /* flashcards */
 .seg-ctl{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}
 .seg-ctl button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px}
@@ -183,6 +196,7 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
   <button class="tab" role="tab" data-tab="topics">Topics &amp; lessons</button>
   <button class="tab" role="tab" data-tab="facts">Key facts</button>
   <button class="tab" role="tab" data-tab="practice">Practice</button>
+  <button class="tab" role="tab" data-tab="games">Games</button>
   <button class="tab" role="tab" data-tab="exam">Practice exam</button>
   <button class="tab" role="tab" data-tab="mistakes">Mistakes</button>
   <button class="tab" role="tab" data-tab="formulas">Flashcards</button>
@@ -192,6 +206,7 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
   <section class="panel" id="p-topics" hidden></section>
   <section class="panel" id="p-facts" hidden></section>
   <section class="panel" id="p-practice" hidden></section>
+  <section class="panel" id="p-games" hidden></section>
   <section class="panel" id="p-exam" hidden></section>
   <section class="panel" id="p-mistakes" hidden></section>
   <section class="panel" id="p-formulas" hidden></section>
