@@ -41,8 +41,14 @@ const TOPICS=[
  {id:'mkt',unit:'Unit 13',name:'Market dynamics: supply, demand, space & asset markets',quant:false},
  {id:'mktm',unit:'Unit 13',name:'Market math: vacancy, absorption, months supply',quant:true},
  {id:'kt13',unit:'Unit 13',name:'Key terms: market dynamics',quant:false,kt:13},
+ {id:'inv',unit:'Ch 19',name:'Analyzing income-producing properties',quant:false},
+ {id:'invm',unit:'Ch 19',name:'Income property math: EGI, NOI, cap rates, BTCF',quant:true},
+ {id:'kt19',unit:'Ch 19',name:'Key terms: income property analysis',quant:false,kt:19},
+ {id:'green',unit:'Lecture',name:'Sustainable development & green building',quant:false},
+ {id:'kt20',unit:'Lecture',name:'Key terms: sustainable development',quant:false,kt:20},
 ];
-const chLab=c=>c>=17?'Chapter '+c:'Unit '+c;
+const chLab=c=>c===20?'the Sustainable Development lecture':c>=17?'Chapter '+c:'Unit '+c;
+const chShort=c=>c===20?'Green':c>=17?'Ch '+c:'Unit '+c;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const TOPIC=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
 

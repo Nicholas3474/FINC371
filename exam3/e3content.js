@@ -37,8 +37,8 @@ GEN.leasem=[
 /* ---------- Unit 10 fee ---------- */
 GEN.pm=[
 ()=>{const gi=ri(20,300)*5000,f=ri(4,10),F=gi*f/100;
- return numQ('pm',`A property manager hired directly by the owner earns ${f}% of gross income. The building collects ${$0(gi)} in gross income this year. What is the management fee?`,F,'$',
- `<p class="eq">Fee = ${f}% × ${$0(gi)} = <b>${$m(F)}</b></p><p class="muted">Your notes: fees are typically 4%–10% of gross income, depending on project size, the manager's duties and local competition.</p>`,
+ return numQ('pm',`A property manager hired directly by the owner earns ${f}% of effective gross income. The building collects ${$0(gi)} in effective gross income this year. What is the management fee?`,F,'$',
+ `<p class="eq">Fee = ${f}% × ${$0(gi)} = <b>${$m(F)}</b></p><p class="muted">Slides: fees are typically 4%–10% of effective gross income, depending on project size, the manager's duties and local market conditions.</p>`,
  [gi*f/1000,F/12,gi*(f+2)/100]);},
 ];
 
@@ -258,7 +258,7 @@ LESSONS.lease=`
 <tr><td>Percentage</td><td>Base rent + % of sales over a threshold (retail)</td></tr>
 <tr><td>Index</td><td>Rent tied to an index such as the CPI</td></tr></table>
 <h4>Key provisions</h4>
-<ul><li><b>Renewal options</b> protect tenants from big increases. <b>Negative</b> renewal clause: tenant leaves unless it gives renewal notice. <b>Positive</b>: lease renews unless the tenant gives termination notice.</li>
+<ul><li><b>Renewal options</b> protect tenants from big increases. Renewal clauses: see the lecture box below (the slides and the notes define negative/positive clauses oppositely).</li>
 <li><b>Expenses:</b> residential landlords usually pay maintenance, taxes and insurance; commercial tenants often pay <b>CAM</b> fees. An <b>expense stop</b> caps the landlord's share; tenants pay the excess.</li>
 <li><b>Assignment</b> transfers all of the tenant's rights, but the tenant stays liable unless released. A <b>sublease</b> transfers part; subleasing for profit is allowed unless the lease forbids it.</li>
 <li><b>Security deposits</b> protect against damage and unpaid rent; inspect before and after occupancy. State law sets return deadlines and eviction rules.</li>
@@ -342,7 +342,7 @@ FORMULAS.splice(0,FORMULAS.length,
  ['Expense stop','Tenant\'s share','(Actual expense − stop) × sq ft'],
  ['CAM share','Pro rata','Tenant sq ft ÷ total GLA × CAM cost'],
  ['Index lease','New rent','Rent × (1 + CPI change)'],
- ['Management fee','Direct hire','4%–10% × gross income'],
+ ['Management fee','Direct hire','4%–10% × effective gross income'],
  ['Vacancy rate','Market slack','Vacant ÷ total space'],
  ['Months supply','Time to absorb','(Vacant + under construction) ÷ monthly net absorption'],
  ['Net absorption','Demand growth','Space leased − space vacated'],

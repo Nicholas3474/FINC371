@@ -1,7 +1,7 @@
 /* ===== UI ===== */
 const KEY='finc371-exam3-v1';
 const EXAM_AT=null; /* set once the exam date is known */
-const CHS=[7,10,11,12,13];
+const CHS=[7,10,11,12,13,19,20];
 const STATUS=[
  {k:'ns',label:'Not started'},{k:'le',label:'Learning'},{k:'np',label:'Needs practice'},{k:'er',label:'Exam-ready'}];
 const PLAN=[
@@ -18,9 +18,9 @@ const PLAN=[
   ['s3a','Shopping centers, offices, industrial & hotels (Unit 12)','com'],['s3b','Key terms: Unit 12','kt12'],
   ['s3c','Market dynamics (Unit 13)','mkt'],['s3d','Market math: vacancy, absorption, months supply','mktm'],['s3e','Key terms: Unit 13','kt13'],
   ['s3f','Key facts tab: read once','facts']]},
- {day:'Session 4',sub:'About 2 hours: Chapter 19 (needs your materials) and mixed review.',items:[
-  ['s4a','Chapter 19: send Claude the slides or notes so a lesson can be added',null],
-  ['s4b','15-question theory set','theory'],['s4c','10 questions on your weakest topics','weak']]},
+ {day:'Session 4',sub:'About 2.5 hours: Chapter 19 and the sustainability lecture.',items:[
+  ['s4a','Analyzing income-producing properties (Ch 19)','inv'],['s4b','Income property math: EGI, NOI, cap rates, BTCF','invm'],['s4c','Key terms: Chapter 19','kt19'],
+  ['s4d','Sustainable development & green building (lecture)','green'],['s4e','Key terms: sustainable development','kt20'],['s4f','15-question theory set','theory']]},
  {day:'Session 5',sub:'About 2.5 hours: the practice exam.',items:[
   ['s5a','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['s5b','Review every missed question and redo similar ones','mistakes'],
@@ -108,7 +108,8 @@ function renderPlan(){
   `<section class="notes"><h3>About your materials</h3><ul>
   <li><b>Exam coverage per the syllabus: Chapters 19, 7, 10, 11, 12 and 13.</b> Chapters 17 and 18 were left out of this guide because they belong to Exam 2.</li>
   <li>Source: “371 Exam 3 - Units 7, 10, 11, 12, 13 & Units 17, 18, 19” (76 pages). Every page was read, including the images: the lease example, the Milford Hills tables, Table 12.1, the months-supply formula and Figures 13.5–13.6.</li>
-  <li><b>Chapter 19 is not in the notes.</b> The first line says it “is not on the Review but is fair game on the Exam.” Send Claude the Chapter 19 slides or notes and it will add a topic.</li>
+  <li><b>Lecture slides added</b> for Chapters 7, 10, 11, 12, 13 and 19 plus the Sustainable Development lecture. Chapter 19 and sustainability come only from the slides. Slide-only details appear in a “From the lecture slides” box in each lesson and in the question banks.</li>
+  <li><b>Where the slides and the classmate's notes disagree, practice questions follow the slides:</b> negative vs. positive renewal clauses (reversed), what owners pay under a net-net lease, and fees based on <i>effective</i> gross income. The regional-center radius differs in three places (8–10, 7–12 and 50 miles).</li>
   <li>Where the notes contradict themselves (regional trade area 8–10 vs. 7–12 miles; super-regional 750,000 vs. 800,000 sq ft), the lesson flags it.</li></ul></section>`;
 }
 
@@ -128,7 +129,7 @@ function renderTopics(){
 let P=null; // {title, qs, i, picked, done, score}
 function startPractice(kind){
   let qs=[],title='';
-  if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','kt7','kt12','kt13'].map(id=>makeQ(id));}
+  if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','inv','invm','green'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
@@ -163,8 +164,8 @@ function renderPractice(){
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
 /* exam blueprint: about two-thirds theory, one-third math, matching how the notes are weighted */
-const THEORY_SLOTS=[['kt7',5],['kt10',2],['kt11',2],['kt12',4],['kt13',5],['lease',6],['pm',5],['res',4],['com',6],['mkt',6]].map(([id,w])=>({id,w,mode:'theory'}));
-const MATH_SLOTS=[['leasem',5],['mktm',5],['pm',1]].map(([id,w])=>({id,w,mode:'math'}));
+const THEORY_SLOTS=[['kt7',4],['kt10',2],['kt11',2],['kt12',3],['kt13',4],['kt19',3],['kt20',2],['lease',6],['pm',5],['res',4],['com',6],['mkt',5],['inv',6],['green',4]].map(([id,w])=>({id,w,mode:'theory'}));
+const MATH_SLOTS=[['leasem',4],['mktm',4],['invm',6],['pm',1]].map(([id,w])=>({id,w,mode:'math'}));
 function dedupe(arr,fn){const seen=new Set();return arr.map(()=>{let q,t=0;do{q=fn();}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);return q;});}
 function buildSet(n,slots){
   const tot=slots.reduce((a,b)=>a+b.w,0);
@@ -229,7 +230,7 @@ function renderFormulas(){
   const cards=fcMode==='formulas'?FORMULAS.map(f=>({name:f[0],when:f[1],back:f[2],mono:true})):TERMS.filter(t=>t.c===fcCh).map(t=>({name:t.t,when:chLab(t.c),back:esc(t.d)}));
   el.innerHTML=`<div class="intro"><p>No formula sheet on the exam, so all of this has to come from memory. Say the definition or formula out loud, then tap the card to check.</p>
   <div class="seg-ctl" role="group" aria-label="Card set"><button class="${fcMode==='terms'?'on':''}" data-fcmode="terms">Key terms</button><button class="${fcMode==='formulas'?'on':''}" data-fcmode="formulas">Formulas</button></div>
-  ${fcMode==='terms'?`<div class="seg-ctl" role="group" aria-label="Chapter">${CHS.map(c=>`<button class="${fcCh===c?'on':''}" data-fcch="${c}">${c>=17?'Ch':'Unit'} ${c}</button>`).join('')}</div>`:''}
+  ${fcMode==='terms'?`<div class="seg-ctl" role="group" aria-label="Chapter">${CHS.map(c=>`<button class="${fcCh===c?'on':''}" data-fcch="${c}">${chShort(c)}</button>`).join('')}</div>`:''}
   <div class="btns"><button class="btn ghost" data-shuffle>Shuffle</button><button class="btn ghost" data-showall>${showAll?'Hide all answers':'Show all answers'}</button><span class="muted">${cards.length} cards</span></div></div>
   <div class="cards">${(fcOrder&&fcOrder.length===cards.length?fcOrder.map(i=>cards[i]):cards).map((c,j)=>{const i=fcOrder&&fcOrder.length===cards.length?fcOrder[j]:j;const open=showAll||flipped[i];return `<button class="card ${open?'flip':''} ${c.mono?'':'card-term'}" data-card="${i}"><span class="card-name">${esc(c.name)}</span><span class="card-when">${c.when}</span><span class="card-eq">${open?c.back:'Tap to reveal'}</span></button>`;}).join('')}</div>`;
 }
@@ -238,7 +239,7 @@ let fcOrder=null;
 /* ---------- key facts ---------- */
 function renderFacts(){
   document.getElementById('p-facts').innerHTML=`<div class="intro"><p>Every specific number, date, name and example in your notes, by chapter. These are the details multiple-choice questions like to test. Read them once now and once more right before the exam.</p></div>`+
-  FACTS.map(g=>`<section class="facts"><h3>${g.title}<span>${chLab(g.ch).replace('Chapter','Ch')}</span></h3><dl>${g.items.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>`).join('');
+  FACTS.map(g=>`<section class="facts"><h3>${g.title}<span>${chShort(g.ch)}</span></h3><dl>${g.items.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>`).join('');
 }
 
 /* ---------- events ---------- */

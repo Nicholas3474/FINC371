@@ -3,7 +3,7 @@ const LISTS=[
 {t:'lease',title:'The four leasehold estates (by duration)',items:['Tenancy for a stated period','Tenancy from period to period','Tenancy at will','Tenancy at sufferance'],decoys:['Tenancy in common','Joint tenancy','Tenancy by the entirety']},
 {t:'lease',title:'Basic elements of a lease',items:['Names of lessor and lessee','Identification of premises','Conveyance of premises','Term of the lease','Rent amount and payment terms','Duties of both parties','Signatures of both parties'],decoys:['Tenant\'s credit score','Appraised value','Broker\'s commission']},
 {t:'lease',title:'Leases classified by how rent is paid or adjusted',items:['Gross lease','Net lease','Fixed-rent lease','Graduated-rent lease','Reappraisal lease','Percentage lease','Index lease'],decoys:['Ground lease','Tenancy at will','Option lease']},
-{t:'lease',title:'What the tenant pays besides rent, least to most',ordered:true,items:['Gross lease: nothing extra','Net-net lease: taxes and insurance','Net-net-net lease: taxes, insurance and maintenance']},
+{t:'lease',title:'What the OWNER pays, most to least (slide table)',ordered:true,items:['Gross: taxes, utilities and insurance','Net: taxes and insurance','Net-net: taxes only','Net-net-net: nothing']},
 {t:'lease',title:'Landlord obligations',items:['Maintain habitable conditions and meet safety codes','Protect tenants from negligence-related harm','Make no unauthorized alterations'],decoys:['Pay the tenant\'s utilities','Guarantee the tenant\'s sales','Renew every lease']},
 {t:'pm',title:'The three functions of property management',items:['Administrative management','Marketing','Physical management'],decoys:['Acquisition','Disposition','Appraisal']},
 {t:'pm',title:'The four functions of an asset manager',items:['Management','Acquisition','Financing','Disposition'],decoys:['Rent collection','Move-in inspections','Advertising']},
@@ -27,6 +27,23 @@ const LISTS=[
 {t:'mkt',title:'The five basic inputs to market analysis',items:['Vacancy rate','Rent or price level','New construction started','New construction completed','Absorption of new space'],decoys:['Mortgage rates','Cap rates','Number of brokers']},
 {t:'mkt',title:'Publicly traded assets (Figure 13.5)',items:['Stocks','REITs','Mutual funds','Bonds','MBS','Money instruments'],decoys:['Real property','Whole mortgages','Bank loans','Venture debt']},
 {t:'mkt',title:'Retail space subcategories, smallest to largest',ordered:true,items:['Freestanding retail','Neighborhood center','Community center','Regional center','Super-regional center','Megamall']},
+{t:'inv',title:'From PGI to NOI (Ch 19)',ordered:true,items:['Potential gross income','Minus vacancy & collection loss','Plus miscellaneous income','Effective gross income','Minus operating expenses','Minus capital expenditures','Net operating income']},
+{t:'inv',title:'NOT included in operating expenses',items:['Mortgage payments','Tax depreciation','Capital expenditures'],decoys:['Property taxes','Utilities','Management fees']},
+{t:'inv',title:'Capital expenditures (CAPX)',items:['Roof replacement','Additions','HVAC replacement','Resurfacing parking areas'],decoys:['Utilities','Hazard insurance','Laundry income']},
+{t:'inv',title:'Fixed operating expenses',items:['Hazard insurance','Local property taxes'],decoys:['Utilities','Maintenance & supplies','Garbage collection']},
+{t:'inv',title:'Miscellaneous income sources',items:['Garage rentals & parking fees','Laundry & vending machines','Clubhouse rentals'],decoys:['Base rent','Security deposits','Mortgage proceeds']},
+{t:'inv',title:'Advantages of real estate investment',items:['Cash flow from operations','Appreciation','Portfolio diversification','Financial leverage'],decoys:['High liquidity','Low dollar amounts','Stable economy']},
+{t:'inv',title:'Disadvantages of real estate investment',items:['High dollar amounts','Lack of liquidity','Changing economic environments'],decoys:['Depreciation','Tax-deductible interest','Diversification']},
+{t:'inv',title:'DCF layout to before-tax cash flow',ordered:true,items:['Purchase price','Potential gross income','Other income','Vacancy & collection loss','Effective gross income','Operating expenses','Net operating income','Debt service','Before-tax cash flow']},
+{t:'green',title:'LEED levels, lowest to highest',ordered:true,items:['Certified (40–49)','Silver (50–59)','Gold (60–79)','Platinum (80+)']},
+{t:'green',title:'LEED timeline, oldest first',ordered:true,items:['Green rating idea (1993)','LEED v1.0 (1998)','LEED v2.0 + Greenbuild in Austin (2001)','LEED v2.1 (2003)','LEED v4.1 (2019)']},
+{t:'green',title:'NAHB Green Building Standard levels, lowest first',ordered:true,items:['Bronze','Silver','Gold','Emerald']},
+{t:'green',title:'Green Globes assessment dimensions',items:['Energy efficiency','Environmental impact','Health','Operation and management'],decoys:['Construction cost','Rent level','Zoning']},
+{t:'green',title:'Living Building Challenge certifications',items:['Living Building Certification','Petal Certification','Zero Energy Certification'],decoys:['LEED Gold','Emerald','Green Associate']},
+{t:'pm',title:'Emergencies allowing landlord entry without notice',items:['Smoke/fire','Water leak','Security system','Storm damage'],decoys:['Showing the unit','Routine inspection','Rent collection']},
+{t:'pm',title:'IREM designations',items:['CPM (Certified Property Manager)','ARM (Accredited Resident Manager)','AMO (Accredited Management Organization)'],decoys:['RPA (Real Property Administrator)','MAI','CCIM']},
+{t:'res',title:'The capital stack (slides)',items:['Senior debt','Junior debt','Mezzanine financing','Equity investors'],decoys:['Security deposits','CAM fees','Percentage rent']},
+{t:'com',title:'Market Analysis Model inputs',items:['Market feasibility','Financial feasibility','Location/site feasibility'],decoys:['Zoning variance','Appraisal review','Tenant estoppel']},
 {t:'mktm',title:'Building a months-supply estimate',ordered:true,items:['Add vacant space and space under construction','Find net absorption per month (annual ÷ 12)','Divide the total by monthly net absorption']},
 {t:'annuity',title:'The six TVM formulas',items:['PV of a lump sum','FV of a lump sum','PV of an annuity','FV of an annuity','Sinking fund payment','Mortgage payment'],decoys:['Net present value','Cap rate','Months supply']},
 {t:'npv',title:'Types of investment risk',items:['Business risk','Financial risk','Purchasing power risk','Liquidity risk'],decoys:['Amortization risk','Vacancy risk','Closing risk']},
@@ -34,6 +51,9 @@ const LISTS=[
 {t:'bal',title:'Building one row of an amortization schedule',ordered:true,items:['Interest = beginning balance × periodic rate','Principal = payment − interest','Ending balance = beginning balance − principal']},
 ];
 const DATES=[
+['LEED v1.0 created','1998'],['First Greenbuild conference (Austin)','2001'],['LEED v4.1','2019'],['LEED Gold points','60–79'],['LEED Platinum points','80+'],['LEED Silver points','50–59'],['Green building ASTM standard','E2114-06a'],
+['Slide pro forma NOI','$89,100'],['Slide pro forma EGI','$162,000'],['Slide pro forma operating expenses','$64,800'],['Management fee base (slides)','% of effective gross income'],['Landlord entry notice','12-hour lead time'],['Landlord entry hours','7:30 a.m.–8:00 p.m.'],
+['Tenancy at will notice (slides)','30 days'],['Manufactured home cost (slides)','~$40/sq ft vs. $90 site-built'],['Asset manager fee, 1970s–80s','0.50%–1.50% of AUM'],['Corporate real estate owned','Over $2 trillion'],['Corporate RE share of industrial firms\' assets','25%–40%'],['Asset manager performance period','3–5 years'],
 ['Lease that must be in writing','Over 1 year'],['Max tenancy for a stated period','Up to 99 years'],['Typical ground lease length','Over 50 years'],['Property manager fee (direct hire)','4%–10% of gross income'],
 ['Neighborhood center typical GLA','50,000 sq ft'],['Community center typical GLA','150,000 sq ft'],['Regional center typical GLA','400,000 sq ft'],['Super-regional center typical GLA','1,000,000 sq ft'],
 ['Neighborhood center site','About 3 acres'],['Community center site','10–30 acres'],['Regional center site','30–50 acres'],['Super-regional center site','100+ acres'],
@@ -52,7 +72,7 @@ function recAtt(topic,ok){(S.att[topic]=S.att[topic]||[]).push(ok?1:0);if(S.att[
 function newMatch(src){
   let pairs=[],topic=null,title='';
   if(src==='dates'){title='Dates & numbers';const used=new Set();for(const p of shuffle(DATES)){if(pairs.length===6)break;if(used.has(p[1]))continue;used.add(p[1]);pairs.push({a:p[0],b:p[1]});}}
-  else{const ch=+src;topic='kt'+ch;title='Key terms · '+chLab(ch);const used=new Set();for(const t of shuffle(TERMS.filter(x=>x.c===ch))){if(pairs.length===6)break;if(t.g>=0&&used.has(t.g))continue;if(t.g>=0)used.add(t.g);pairs.push({a:t.t,b:t.s});}}
+  else{const ch=+src;topic='kt'+ch;title='Key terms · '+chShort(ch);const used=new Set();for(const t of shuffle(TERMS.filter(x=>x.c===ch))){if(pairs.length===6)break;if(t.g>=0&&used.has(t.g))continue;if(t.g>=0)used.add(t.g);pairs.push({a:t.t,b:t.s});}}
   pairs.forEach((p,i)=>p.id=i);
   GM={view:'match',src,topic,title,pairs,left:shuffle(pairs.map(p=>p.id)),right:shuffle(pairs.map(p=>p.id)),sel:null,done:{},miss:0,flash:null,t0:Date.now()};
 }
@@ -65,7 +85,7 @@ function renderGames(){
   if(GM.view==='menu'){
     el.innerHTML=`<div class="intro"><p>Two quick games built from your notes. Results count toward each topic's status: a match-up round with one miss or fewer counts as correct, and so does a perfect list.</p></div>
     <section class="day"><header><h3>Match-up</h3><span class="muted">6 pairs per round. Tap a term, then its match.</span></header>
-    <div class="topic-grid g-grid">${CHS.map(c=>`<button class="tpick" data-gmatch="${c}"><span>Key terms · ${chLab(c)}</span>${chip(status('kt'+c))}</button>`).join('')}<button class="tpick" data-gmatch="dates"><span>Dates & numbers</span><span class="muted">All chapters</span></button></div></section>
+    <div class="topic-grid g-grid">${CHS.map(c=>`<button class="tpick" data-gmatch="${c}"><span>Key terms · ${chShort(c)}</span>${chip(status('kt'+c))}</button>`).join('')}<button class="tpick" data-gmatch="dates"><span>Dates & numbers</span><span class="muted">All chapters</span></button></div></section>
     <section class="day"><header><h3>Lists</h3><span class="muted">Pick every item that belongs, or put the steps in order.</span></header>
     <div class="btns"><button class="btn" data-glist="rand">Random list</button></div>
     <div class="g-lists">${LISTS.map((L,i)=>`<button class="tpick" data-glist="${i}"><span>${L.title}</span><span class="g-tag">${TOPIC[L.t].unit} · ${L.ordered?'Order':'Pick all'}</span></button>`).join('')}</div></section>`;
