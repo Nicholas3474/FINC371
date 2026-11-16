@@ -185,7 +185,7 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
 </style>
 
 <header class="top"><div class="wrap">
-  <div class="eyebrow">FINC 371 · Real estate · Exam 3 · Units 7, 10–13 · Ch 17–19</div>
+  <div class="eyebrow">FINC 371 · Real estate · Exam 3 · Units 7, 10–13 · Ch 19</div>
   <h1>Exam 3 study guide</h1>
   <div class="top-row"><span id="countdown"></span><span id="sync">Loading progress…</span></div>
   <div class="meter" id="meter" aria-label="Topic readiness"></div>
@@ -255,16 +255,6 @@ const TOPICS=[
  {id:'mkt',unit:'Unit 13',name:'Market dynamics: supply, demand, space & asset markets',quant:false},
  {id:'mktm',unit:'Unit 13',name:'Market math: vacancy, absorption, months supply',quant:true},
  {id:'kt13',unit:'Unit 13',name:'Key terms: market dynamics',quant:false,kt:13},
- {id:'lump',unit:'Ch 17',name:'Lump sums & compounding',quant:true},
- {id:'annuity',unit:'Ch 17',name:'Annuities & sinking funds',quant:true},
- {id:'npv',unit:'Ch 17',name:'NPV, IRR & risk',quant:true},
- {id:'kt17',unit:'Ch 17',name:'Key terms: risk, return & TVM',quant:false,kt:17},
- {id:'pay',unit:'Ch 18',name:'Mortgage payments & amortization',quant:true},
- {id:'bal',unit:'Ch 18',name:'Loan balances, interest & principal',quant:true},
- {id:'refi',unit:'Ch 18',name:'Refinancing',quant:true},
- {id:'points',unit:'Ch 18',name:'Points & effective interest rate',quant:true},
- {id:'arm',unit:'Ch 18',name:'Two-step mortgages & ARMs',quant:true},
- {id:'kt18',unit:'Ch 18',name:'Key terms: mortgage mechanics',quant:false,kt:18},
 ];
 const chLab=c=>c>=17?'Chapter '+c:'Unit '+c;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1452,6 +1442,8 @@ ${ex('your notes and study exercise 9',`<p>30 units/month absorbed, 30 vacant, 9
 ${fc('Net vs. gross absorption','Net = space leased − space vacated &nbsp;·&nbsp; Gross = all space leased','','Measuring demand growth.','','Calling gross absorption "net."')}
 <p><b>Absorption rate</b> (Unit 11): months to sell current inventory = homes for sale ÷ sales per month.</p>`;
 
+/* Exam 3 covers Units 7, 10–13 and 19 only (syllabus), so Ch 17–18 terms are dropped */
+for(let i=TERMS.length-1;i>=0;i--)if(TERMS[i].c>=17)TERMS.splice(i,1);
 FORMULAS.splice(0,FORMULAS.length,
  ['Percentage lease','Retail rent','Base rent + % × (sales − breakpoint)'],
  ['Graduated rent','Year n rent','Year-1 rent × (1 + g)<sup>n−1</sup>'],
@@ -1462,20 +1454,7 @@ FORMULAS.splice(0,FORMULAS.length,
  ['Vacancy rate','Market slack','Vacant ÷ total space'],
  ['Months supply','Time to absorb','(Vacant + under construction) ÷ monthly net absorption'],
  ['Net absorption','Demand growth','Space leased − space vacated'],
- ['Absorption (homes)','Months to sell out','Inventory ÷ sales per month'],
- ['FV of a lump sum','One amount → future','FV = PV(1 + i)<sup>n</sup>'],
- ['PV of a lump sum','One amount → today','PV = FV / (1 + i)<sup>n</sup>'],
- ['Monthly compounding','m periods per year','FV = PV(1 + i/m)<sup>n·m</sup>'],
- ['PV of an annuity','Equal payments → today','PVA = A[1 − 1/(1+i)<sup>n</sup>] / i'],
- ['FV of an annuity','Equal deposits → future','FVA = A[(1+i)<sup>n</sup> − 1] / i'],
- ['Sinking fund payment','Deposit to reach a target','A = FVA × i / [(1+i)<sup>n</sup> − 1]'],
- ['Mortgage payment','Loan → payment','A = PV × i / [1 − 1/(1+i)<sup>n</sup>]'],
- ['Loan balance','After k payments','PV of the remaining payments'],
- ['Interest in next payment','Payment k+1','Balance<sub>k</sub> × i/12'],
- ['NPV','Accept if > 0','−CF<sub>0</sub> + Σ CF<sub>t</sub>/(1+r)<sup>t</sup>'],
- ['IRR','Accept if ≥ required','Rate where NPV = 0'],
- ['Effective rate','Loan with points','Rate where net proceeds = PV of payments (+ balance)'],
- ['ARM rate','Each adjustment','Index + margin, within annual and lifetime caps']
+ ['Absorption (homes)','Months to sell out','Inventory ÷ sales per month']
 );
 /* ===== Key facts: specific numbers, names, examples and lists from the Exam 3 notes ===== */
 const FACTS=[
@@ -1550,17 +1529,6 @@ const FACTS=[
 ['Months supply','(Vacant + under construction) ÷ monthly net absorption. Example: (30 + 90) ÷ 30 = <b>4</b>. Exercise 9: 9,000 ÷ (10,000/12) = <b>10.8</b>.'],
 ['Research firms','<b>Torto Wheaton Research</b>, <b>LaSalle Investment Advisors</b>, <b>RREEF Research</b>.'],
 ]},
-{ch:17,title:'Risk, return & TVM (same as Exam 2)',items:[
-['Land example','$70,000 at 10%: $77,000 → $84,700 → <b>$93,170</b>.'],
-['NPV/IRR example','$10,000; flows $100, $1,600, $1,800, $450, $12,500; 12% → NPV ≈ +$24.82; IRR <b>12.0646%</b>.'],
-['Four risks','Business, financial, purchasing power, liquidity.'],
-]},
-{ch:18,title:'Mortgage mechanics (same as Exam 2)',items:[
-['Amortization','$100,000, 10%, 10 years: <b>$16,274.54</b>/year or <b>$1,321.51</b>/month.'],
-['Balance','$133,000, 30 yr, 7.5% → <b>$125,841.83</b> after 60 payments.'],
-['Refinance','At 6%: save <b>$119.16</b>/month, or finish <b>73 months</b> early.'],
-['Points','1 point = 1% of the loan, about 0.125% off the rate. Spider Savings prepaid → about <b>8.125%</b>.'],
-]},
 ];
 /* ===== Games: Match-up and Lists ===== */
 const LISTS=[
@@ -1608,6 +1576,8 @@ const DATES=[
 ['Lease example base rent','$3,880 a month'],['Lease example security deposit','$3,000'],['Lease example late fee','$300 after 5 days'],['Lease example CAM fee','$700 a month'],['Milford Hills total development cost','$2,287,050'],
 ];
 
+/* drop lists for topics not on this exam */
+for(let i=LISTS.length-1;i>=0;i--)if(!TOPIC[LISTS[i].t])LISTS.splice(i,1);
 let GM={view:'menu'};
 function recAtt(topic,ok){(S.att[topic]=S.att[topic]||[]).push(ok?1:0);if(S.att[topic].length>20)S.att[topic]=S.att[topic].slice(-20);save();renderHeader();}
 
@@ -1675,7 +1645,7 @@ document.addEventListener('click',e=>{
 /* ===== UI ===== */
 const KEY='finc371-exam3-v1';
 const EXAM_AT=null; /* set once the exam date is known */
-const CHS=[7,10,11,12,13,17,18];
+const CHS=[7,10,11,12,13];
 const STATUS=[
  {k:'ns',label:'Not started'},{k:'le',label:'Learning'},{k:'np',label:'Needs practice'},{k:'er',label:'Exam-ready'}];
 const PLAN=[
@@ -1692,9 +1662,9 @@ const PLAN=[
   ['s3a','Shopping centers, offices, industrial & hotels (Unit 12)','com'],['s3b','Key terms: Unit 12','kt12'],
   ['s3c','Market dynamics (Unit 13)','mkt'],['s3d','Market math: vacancy, absorption, months supply','mktm'],['s3e','Key terms: Unit 13','kt13'],
   ['s3f','Key facts tab: read once','facts']]},
- {day:'Session 4',sub:'About 2.5 hours: Chapters 17 and 18 refresh (same material as Exam 2).',items:[
-  ['s4a','Lump sums, annuities, NPV/IRR','lump'],['s4b','Mortgage payments & balances','pay'],['s4c','Refinancing, points, ARMs','points'],
-  ['s4d','Key terms: Chapters 17 and 18','kt17'],['s4e','15-question theory set','theory']]},
+ {day:'Session 4',sub:'About 2 hours: Chapter 19 (needs your materials) and mixed review.',items:[
+  ['s4a','Chapter 19: send Claude the slides or notes so a lesson can be added',null],
+  ['s4b','15-question theory set','theory'],['s4c','10 questions on your weakest topics','weak']]},
  {day:'Session 5',sub:'About 2.5 hours: the practice exam.',items:[
   ['s5a','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['s5b','Review every missed question and redo similar ones','mistakes'],
@@ -1780,9 +1750,9 @@ function renderPlan(){
     const t=link&&TOPIC[link];
     return `<li><input type="checkbox" id="pl-${id}" data-plan="${id}" ${S.plan[id]?'checked':''}><label for="pl-${id}">${esc(txt)}</label>${t?chip(status(link)):''}${link?`<button class="link" data-go="${link}">${t?'Open':'Start'}</button>`:''}</li>`;}).join('')}</ul></section>`;}).join('')+
   `<section class="notes"><h3>About your materials</h3><ul>
+  <li><b>Exam coverage per the syllabus: Chapters 19, 7, 10, 11, 12 and 13.</b> Chapters 17 and 18 were left out of this guide because they belong to Exam 2.</li>
   <li>Source: “371 Exam 3 - Units 7, 10, 11, 12, 13 & Units 17, 18, 19” (76 pages). Every page was read, including the images: the lease example, the Milford Hills tables, Table 12.1, the months-supply formula and Figures 13.5–13.6.</li>
   <li><b>Chapter 19 is not in the notes.</b> The first line says it “is not on the Review but is fair game on the Exam.” Send Claude the Chapter 19 slides or notes and it will add a topic.</li>
-  <li>Chapters 17 and 18 are word for word the same as your Exam 2 notes, so those topics are reused here.</li>
   <li>Where the notes contradict themselves (regional trade area 8–10 vs. 7–12 miles; super-regional 750,000 vs. 800,000 sq ft), the lesson flags it.</li></ul></section>`;
 }
 
@@ -1802,7 +1772,7 @@ function renderTopics(){
 let P=null; // {title, qs, i, picked, done, score}
 function startPractice(kind){
   let qs=[],title='';
-  if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','lump','pay','bal'].map(id=>makeQ(id));}
+  if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','kt7','kt12','kt13'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
@@ -1837,8 +1807,8 @@ function renderPractice(){
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
 /* exam blueprint: about two-thirds theory, one-third math, matching how the notes are weighted */
-const THEORY_SLOTS=[['kt7',4],['kt10',2],['kt11',2],['kt12',3],['kt13',4],['kt17',2],['kt18',2],['lease',6],['pm',5],['res',4],['com',6],['mkt',6],['npv',1],['pay',1],['points',1],['arm',1]].map(([id,w])=>({id,w,mode:'theory'}));
-const MATH_SLOTS=[['leasem',3],['mktm',3],['lump',2],['annuity',2],['npv',2],['pay',2],['bal',2],['refi',1],['points',1],['arm',1]].map(([id,w])=>({id,w,mode:'math'}));
+const THEORY_SLOTS=[['kt7',5],['kt10',2],['kt11',2],['kt12',4],['kt13',5],['lease',6],['pm',5],['res',4],['com',6],['mkt',6]].map(([id,w])=>({id,w,mode:'theory'}));
+const MATH_SLOTS=[['leasem',5],['mktm',5],['pm',1]].map(([id,w])=>({id,w,mode:'math'}));
 function dedupe(arr,fn){const seen=new Set();return arr.map(()=>{let q,t=0;do{q=fn();}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);return q;});}
 function buildSet(n,slots){
   const tot=slots.reduce((a,b)=>a+b.w,0);

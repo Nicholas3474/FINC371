@@ -71,15 +71,4 @@ const FACTS=[
 ['Months supply','(Vacant + under construction) ÷ monthly net absorption. Example: (30 + 90) ÷ 30 = <b>4</b>. Exercise 9: 9,000 ÷ (10,000/12) = <b>10.8</b>.'],
 ['Research firms','<b>Torto Wheaton Research</b>, <b>LaSalle Investment Advisors</b>, <b>RREEF Research</b>.'],
 ]},
-{ch:17,title:'Risk, return & TVM (same as Exam 2)',items:[
-['Land example','$70,000 at 10%: $77,000 → $84,700 → <b>$93,170</b>.'],
-['NPV/IRR example','$10,000; flows $100, $1,600, $1,800, $450, $12,500; 12% → NPV ≈ +$24.82; IRR <b>12.0646%</b>.'],
-['Four risks','Business, financial, purchasing power, liquidity.'],
-]},
-{ch:18,title:'Mortgage mechanics (same as Exam 2)',items:[
-['Amortization','$100,000, 10%, 10 years: <b>$16,274.54</b>/year or <b>$1,321.51</b>/month.'],
-['Balance','$133,000, 30 yr, 7.5% → <b>$125,841.83</b> after 60 payments.'],
-['Refinance','At 6%: save <b>$119.16</b>/month, or finish <b>73 months</b> early.'],
-['Points','1 point = 1% of the loan, about 0.125% off the rate. Spider Savings prepaid → about <b>8.125%</b>.'],
-]},
 ];

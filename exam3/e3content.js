@@ -334,6 +334,8 @@ ${ex('your notes and study exercise 9',`<p>30 units/month absorbed, 30 vacant, 9
 ${fc('Net vs. gross absorption','Net = space leased − space vacated &nbsp;·&nbsp; Gross = all space leased','','Measuring demand growth.','','Calling gross absorption "net."')}
 <p><b>Absorption rate</b> (Unit 11): months to sell current inventory = homes for sale ÷ sales per month.</p>`;
 
+/* Exam 3 covers Units 7, 10–13 and 19 only (syllabus), so Ch 17–18 terms are dropped */
+for(let i=TERMS.length-1;i>=0;i--)if(TERMS[i].c>=17)TERMS.splice(i,1);
 FORMULAS.splice(0,FORMULAS.length,
  ['Percentage lease','Retail rent','Base rent + % × (sales − breakpoint)'],
  ['Graduated rent','Year n rent','Year-1 rent × (1 + g)<sup>n−1</sup>'],
@@ -344,18 +346,5 @@ FORMULAS.splice(0,FORMULAS.length,
  ['Vacancy rate','Market slack','Vacant ÷ total space'],
  ['Months supply','Time to absorb','(Vacant + under construction) ÷ monthly net absorption'],
  ['Net absorption','Demand growth','Space leased − space vacated'],
- ['Absorption (homes)','Months to sell out','Inventory ÷ sales per month'],
- ['FV of a lump sum','One amount → future','FV = PV(1 + i)<sup>n</sup>'],
- ['PV of a lump sum','One amount → today','PV = FV / (1 + i)<sup>n</sup>'],
- ['Monthly compounding','m periods per year','FV = PV(1 + i/m)<sup>n·m</sup>'],
- ['PV of an annuity','Equal payments → today','PVA = A[1 − 1/(1+i)<sup>n</sup>] / i'],
- ['FV of an annuity','Equal deposits → future','FVA = A[(1+i)<sup>n</sup> − 1] / i'],
- ['Sinking fund payment','Deposit to reach a target','A = FVA × i / [(1+i)<sup>n</sup> − 1]'],
- ['Mortgage payment','Loan → payment','A = PV × i / [1 − 1/(1+i)<sup>n</sup>]'],
- ['Loan balance','After k payments','PV of the remaining payments'],
- ['Interest in next payment','Payment k+1','Balance<sub>k</sub> × i/12'],
- ['NPV','Accept if > 0','−CF<sub>0</sub> + Σ CF<sub>t</sub>/(1+r)<sup>t</sup>'],
- ['IRR','Accept if ≥ required','Rate where NPV = 0'],
- ['Effective rate','Loan with points','Rate where net proceeds = PV of payments (+ balance)'],
- ['ARM rate','Each adjustment','Index + margin, within annual and lifetime caps']
+ ['Absorption (homes)','Months to sell out','Inventory ÷ sales per month']
 );

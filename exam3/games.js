@@ -44,6 +44,8 @@ const DATES=[
 ['Lease example base rent','$3,880 a month'],['Lease example security deposit','$3,000'],['Lease example late fee','$300 after 5 days'],['Lease example CAM fee','$700 a month'],['Milford Hills total development cost','$2,287,050'],
 ];
 
+/* drop lists for topics not on this exam */
+for(let i=LISTS.length-1;i>=0;i--)if(!TOPIC[LISTS[i].t])LISTS.splice(i,1);
 let GM={view:'menu'};
 function recAtt(topic,ok){(S.att[topic]=S.att[topic]||[]).push(ok?1:0);if(S.att[topic].length>20)S.att[topic]=S.att[topic].slice(-20);save();renderHeader();}
 

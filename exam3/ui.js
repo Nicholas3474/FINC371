@@ -1,7 +1,7 @@
 /* ===== UI ===== */
 const KEY='finc371-exam3-v1';
 const EXAM_AT=null; /* set once the exam date is known */
-const CHS=[7,10,11,12,13,17,18];
+const CHS=[7,10,11,12,13];
 const STATUS=[
  {k:'ns',label:'Not started'},{k:'le',label:'Learning'},{k:'np',label:'Needs practice'},{k:'er',label:'Exam-ready'}];
 const PLAN=[
@@ -18,9 +18,9 @@ const PLAN=[
   ['s3a','Shopping centers, offices, industrial & hotels (Unit 12)','com'],['s3b','Key terms: Unit 12','kt12'],
   ['s3c','Market dynamics (Unit 13)','mkt'],['s3d','Market math: vacancy, absorption, months supply','mktm'],['s3e','Key terms: Unit 13','kt13'],
   ['s3f','Key facts tab: read once','facts']]},
- {day:'Session 4',sub:'About 2.5 hours: Chapters 17 and 18 refresh (same material as Exam 2).',items:[
-  ['s4a','Lump sums, annuities, NPV/IRR','lump'],['s4b','Mortgage payments & balances','pay'],['s4c','Refinancing, points, ARMs','points'],
-  ['s4d','Key terms: Chapters 17 and 18','kt17'],['s4e','15-question theory set','theory']]},
+ {day:'Session 4',sub:'About 2 hours: Chapter 19 (needs your materials) and mixed review.',items:[
+  ['s4a','Chapter 19: send Claude the slides or notes so a lesson can be added',null],
+  ['s4b','15-question theory set','theory'],['s4c','10 questions on your weakest topics','weak']]},
  {day:'Session 5',sub:'About 2.5 hours: the practice exam.',items:[
   ['s5a','Timed practice exam: 60 questions, 120 minutes','exam'],
   ['s5b','Review every missed question and redo similar ones','mistakes'],
@@ -106,9 +106,9 @@ function renderPlan(){
     const t=link&&TOPIC[link];
     return `<li><input type="checkbox" id="pl-${id}" data-plan="${id}" ${S.plan[id]?'checked':''}><label for="pl-${id}">${esc(txt)}</label>${t?chip(status(link)):''}${link?`<button class="link" data-go="${link}">${t?'Open':'Start'}</button>`:''}</li>`;}).join('')}</ul></section>`;}).join('')+
   `<section class="notes"><h3>About your materials</h3><ul>
+  <li><b>Exam coverage per the syllabus: Chapters 19, 7, 10, 11, 12 and 13.</b> Chapters 17 and 18 were left out of this guide because they belong to Exam 2.</li>
   <li>Source: “371 Exam 3 - Units 7, 10, 11, 12, 13 & Units 17, 18, 19” (76 pages). Every page was read, including the images: the lease example, the Milford Hills tables, Table 12.1, the months-supply formula and Figures 13.5–13.6.</li>
   <li><b>Chapter 19 is not in the notes.</b> The first line says it “is not on the Review but is fair game on the Exam.” Send Claude the Chapter 19 slides or notes and it will add a topic.</li>
-  <li>Chapters 17 and 18 are word for word the same as your Exam 2 notes, so those topics are reused here.</li>
   <li>Where the notes contradict themselves (regional trade area 8–10 vs. 7–12 miles; super-regional 750,000 vs. 800,000 sq ft), the lesson flags it.</li></ul></section>`;
 }
 
@@ -128,7 +128,7 @@ function renderTopics(){
 let P=null; // {title, qs, i, picked, done, score}
 function startPractice(kind){
   let qs=[],title='';
-  if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','lump','pay','bal'].map(id=>makeQ(id));}
+  if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','kt7','kt12','kt13'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
@@ -163,8 +163,8 @@ function renderPractice(){
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
 /* exam blueprint: about two-thirds theory, one-third math, matching how the notes are weighted */
-const THEORY_SLOTS=[['kt7',4],['kt10',2],['kt11',2],['kt12',3],['kt13',4],['kt17',2],['kt18',2],['lease',6],['pm',5],['res',4],['com',6],['mkt',6],['npv',1],['pay',1],['points',1],['arm',1]].map(([id,w])=>({id,w,mode:'theory'}));
-const MATH_SLOTS=[['leasem',3],['mktm',3],['lump',2],['annuity',2],['npv',2],['pay',2],['bal',2],['refi',1],['points',1],['arm',1]].map(([id,w])=>({id,w,mode:'math'}));
+const THEORY_SLOTS=[['kt7',5],['kt10',2],['kt11',2],['kt12',4],['kt13',5],['lease',6],['pm',5],['res',4],['com',6],['mkt',6]].map(([id,w])=>({id,w,mode:'theory'}));
+const MATH_SLOTS=[['leasem',5],['mktm',5],['pm',1]].map(([id,w])=>({id,w,mode:'math'}));
 function dedupe(arr,fn){const seen=new Set();return arr.map(()=>{let q,t=0;do{q=fn();}while(seen.has(q.key||q.prompt)&&++t<40);seen.add(q.key||q.prompt);return q;});}
 function buildSet(n,slots){
   const tot=slots.reduce((a,b)=>a+b.w,0);

@@ -41,16 +41,6 @@ const TOPICS=[
  {id:'mkt',unit:'Unit 13',name:'Market dynamics: supply, demand, space & asset markets',quant:false},
  {id:'mktm',unit:'Unit 13',name:'Market math: vacancy, absorption, months supply',quant:true},
  {id:'kt13',unit:'Unit 13',name:'Key terms: market dynamics',quant:false,kt:13},
- {id:'lump',unit:'Ch 17',name:'Lump sums & compounding',quant:true},
- {id:'annuity',unit:'Ch 17',name:'Annuities & sinking funds',quant:true},
- {id:'npv',unit:'Ch 17',name:'NPV, IRR & risk',quant:true},
- {id:'kt17',unit:'Ch 17',name:'Key terms: risk, return & TVM',quant:false,kt:17},
- {id:'pay',unit:'Ch 18',name:'Mortgage payments & amortization',quant:true},
- {id:'bal',unit:'Ch 18',name:'Loan balances, interest & principal',quant:true},
- {id:'refi',unit:'Ch 18',name:'Refinancing',quant:true},
- {id:'points',unit:'Ch 18',name:'Points & effective interest rate',quant:true},
- {id:'arm',unit:'Ch 18',name:'Two-step mortgages & ARMs',quant:true},
- {id:'kt18',unit:'Ch 18',name:'Key terms: mortgage mechanics',quant:false,kt:18},
 ];
 const chLab=c=>c>=17?'Chapter '+c:'Unit '+c;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
