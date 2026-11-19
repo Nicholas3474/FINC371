@@ -169,9 +169,6 @@ details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-bottom
 .g-miss{border-style:dashed;border-color:var(--er);color:var(--er)}
 .g-chip[disabled],.g-def[disabled]{cursor:default}
 .g-order{margin:8px 0;padding-left:22px}.g-order li{padding:3px 0;font-weight:600}
-/* speed rounds */
-.sbar{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}.sbar i{display:block;height:100%;width:100%;background:var(--ms);transition:width .2s linear}
-.speed-note{font:600 14px var(--mono);margin:0}.speed-note.fast{color:var(--ms)}.speed-note.slow{color:var(--np)}
 /* lecture boxes */
 .lecture{border:1px solid var(--accent);border-radius:10px;padding:10px 14px;margin:16px 0;background:var(--accent-soft)}
 .lecture-h{font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:4px}
@@ -2079,11 +2076,9 @@ function qKey(q){const s=q.topic+'|'+(q.key||q.prompt);let h=5381;for(let i=0;i<
 const isSeen=q=>!!(S.seen&&S.seen[qKey(q)]);
 /* prefer questions you have not seen before, so a correct answer means recall rather than recognition */
 const _makeQ=makeQ;makeQ=function(id,mode){let q,t=0;do{q=_makeQ(id,mode);}while(q.bank&&isSeen(q)&&++t<20);return q;};
-/* automatic = answered correctly within the time limit: reading time (about 20 characters a second) plus 4 seconds for concept and key-term questions, capped at 8–30 s; 60 s for calculations */
-const limitFor=q=>{if(!q.bank)return 60000;const n=(q.prompt+q.choices.join(' ')).replace(/<[^>]+>/g,'').length;return Math.max(8000,Math.min(30000,Math.round((4000+n*50)/1000)*1000));};
-function logAnswer(topic,ok,fresh,exam,dt,lim){S.log=S.log||{};const L=(S.log[topic]=S.log[topic]||[]);const e={o:ok?1:0,t:Date.now(),f:fresh?1:0,x:exam?1:0};if(dt!=null){e.d=Math.round(dt/100)/10;e.a=ok&&dt<=lim?1:0;}L.push(e);if(L.length>40)S.log[topic]=L.slice(-40);}
+function logAnswer(topic,ok,fresh,exam){S.log=S.log||{};const L=(S.log[topic]=S.log[topic]||[]);L.push({o:ok?1:0,t:Date.now(),f:fresh?1:0,x:exam?1:0});if(L.length>40)S.log[topic]=L.slice(-40);}
 const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();};
-/* Mastered = exam-ready plus: 9 of last 10 right, 3 right on never-seen questions, right answers on 2 different days, 1 right under timed exam conditions, and the last 5 timed answers right within the speed limit */
+/* Mastered = exam-ready plus: 9 of last 10 right, 3 right on never-seen questions, right answers on 2 different days, and 1 right under timed exam conditions */
 function mastery(id){
   const L=(S.log&&S.log[id])||[],last=L.slice(-10),c10=last.reduce((a,b)=>a+b.o,0);
   const fresh=L.filter(e=>e.o&&e.f).length,days=new Set(L.filter(e=>e.o).map(e=>dayKey(e.t))).size,ex=L.filter(e=>e.o&&e.x).length;
@@ -2092,8 +2087,6 @@ function mastery(id){
     {ok:fresh>=3,label:'3 correct on questions you had never seen',have:`${fresh} so far`},
     {ok:days>=2,label:'Correct answers on 2 different days',have:`${days} day${days===1?'':'s'}`},
     {ok:ex>=1,label:'1 correct in a timed practice exam',have:`${ex} so far`}];
-  const timed=L.filter(e=>e.d!=null).slice(-5),auto=timed.filter(e=>e.a).length,lim=TOPIC[id]&&TOPIC[id].quant&&!TOPIC[id].kt?'reading time + 4 s; 60 s for calculations':'reading time + 4 s';
-  checks.push({ok:timed.length>=5&&auto===5,label:`Automatic: your last 5 timed answers all right and fast (${lim})`,have:`${auto} of last ${timed.length} automatic`});
   return {ok:checks.every(c=>c.ok),checks};
 }
 function masteryHTML(id){const m=mastery(id);return `<div class="mastery"><div class="mastery-h">${m.ok?'Mastered':'Path to mastery'}</div><ul>${m.checks.map(c=>`<li class="${c.ok?'done':''}"><span class="mk">${c.ok?'✓':'○'}</span>${c.label} <span class="muted">(${c.have})</span></li>`).join('')}</ul></div>`;}
@@ -2107,13 +2100,13 @@ function status(id){const s=stats(id);
   return 'le';}
 function statusHint(id){const s=stats(id),st=status(id);
   if(st==='ms')return 'Mastered: every mastery check is met';
-  if(st==='er'){const m=mastery(id);return `Exam-ready · ${m.checks.filter(c=>c.ok).length} of ${m.checks.length} mastery checks met`;}
+  if(st==='er'){const m=mastery(id);return `Exam-ready · ${m.checks.filter(c=>c.ok).length} of 4 mastery checks met`;}
   if(s.n===0)return S.read[id]?'Lesson opened. Answer questions to move up.':'Open the lesson, then practice';
   const need=Math.max(0,5-s.last.length);
   return `${s.c} of last ${s.last.length} correct · need 4 of your last 5${need?` (${need} more to answer)`:''}`;}
-function record(q,given,exam,dt){
-  S.seen=S.seen||{};const ok=given===q.answer,k=qKey(q),fresh=!q.bank||!S.seen[k];
-  S.seen[k]=1;logAnswer(q.topic,ok,fresh,exam,dt,limitFor(q));
+function record(q,given,exam){
+  const ok=given===q.answer,k=qKey(q),fresh=!q.bank||!S.seen[k];
+  S.seen=S.seen||{};S.seen[k]=1;logAnswer(q.topic,ok,fresh,exam);
   (S.att[q.topic]=S.att[q.topic]||[]).push(ok?1:0);
   if(S.att[q.topic].length>20)S.att[q.topic]=S.att[q.topic].slice(-20);
   if(!ok){S.mistakes.unshift({topic:q.topic,prompt:q.prompt,given:given==null?'(no answer)':q.choices[given],right:q.choices[q.answer],sol:q.sol,t:Date.now()});S.mistakes=S.mistakes.slice(0,80);}
@@ -2164,26 +2157,24 @@ function renderPlan(){
 let openTopic=null;
 function renderTopics(){
   const el=document.getElementById('p-topics');
-  el.innerHTML=`<p class="intro">A topic turns <b>Exam-ready</b> after 4 of your last 5 questions on it are right. <b>Mastered</b> means you know it without having to think: 9 of your last 10 right, 3 right on questions you'd never seen, right answers on 2 different days, at least 1 right in a timed practice exam, and your last 5 timed answers right <b>fast</b>: within the time it takes to read the question and choices plus about 4 seconds (60 seconds for calculations). The timer shows each question's limit. Speed rounds are the fastest way to prove that last check. Practice now favors questions you haven't seen. Mastery tracking starts with answers given after this update.</p>`+
+  el.innerHTML=`<p class="intro">A topic turns <b>Exam-ready</b> after 4 of your last 5 questions on it are right. <b>Mastered</b> is stricter: 9 of your last 10 right, 3 right on questions you'd never seen, right answers on 2 different days, and at least 1 right in a timed practice exam. Practice now favors questions you haven't seen. Mastery tracking starts with answers given after this update.</p>`+
   TOPICS.map(t=>{const st=status(t.id),s=stats(t.id),open=openTopic===t.id;
    return `<article class="topic ${open?'open':''}" id="topic-${t.id}"><button class="topic-row" data-topic="${t.id}" aria-expanded="${open}">
    <span class="topic-unit">${t.unit}</span><span class="topic-name">${t.name}</span>${chip(st)}
    <span class="pips" aria-label="last five answers">${[0,1,2,3,4].map(i=>{const v=s.last[i];return `<i class="pip ${v===1?'ok':v===0?'no':''}"></i>`;}).join('')}</span></button>
-   ${open?`<div class="lesson"><p class="hint">${statusHint(t.id)}</p>${masteryHTML(t.id)}${LESSONS[t.id]}<div class="lesson-actions btns"><button class="btn" data-practice="${t.id}">Practice this topic</button><button class="btn ghost" data-speed="${t.id}">Speed round</button></div></div>`:''}</article>`;}).join('');
+   ${open?`<div class="lesson"><p class="hint">${statusHint(t.id)}</p>${masteryHTML(t.id)}${LESSONS[t.id]}<div class="lesson-actions"><button class="btn" data-practice="${t.id}">Practice this topic</button></div></div>`:''}</article>`;}).join('');
 }
 
 /* ---------- practice ---------- */
 let P=null; // {title, qs, i, picked, done, score}
-function startPractice(kind,speed){
+function startPractice(kind){
   let qs=[],title='';
   if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','inv','invm','green'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:1,ms:0.25}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
   else {title=TOPIC[kind].name;qs=dedupe(Array.from({length:8}),()=>makeQ(kind));}
-  if(speed){title='Speed round · '+title;if(kind==='theory')qs=buildSet(15,THEORY_SLOTS);}
-  if(P&&P.timer)clearInterval(P.timer);
-  P={title,qs,i:0,picked:null,done:false,score:0,kind,speed:!!speed,fast:0};
+  P={title,qs,i:0,picked:null,done:false,score:0,kind};
   go('practice');
 }
 function qHTML(q,n,name,picked,reveal){
@@ -2198,30 +2189,17 @@ function renderPractice(){
   if(!P){
     el.innerHTML=`<div class="starts"><button class="start" data-start="diag"><b>Diagnostic</b><span>10 questions, one per major topic. Start here.</span></button>
     <button class="start" data-start="theory"><b>Theory mix</b><span>15 concept and key-term questions from all six chapters. No math.</span></button>
-    <button class="start" data-speed="all"><b>Speed round</b><span>15 concept and key-term questions against the clock: reading time plus about 4 seconds each. Proves you know it without thinking.</span></button>
     <button class="start" data-start="weak"><b>Weakest topics</b><span>10 questions weighted toward topics that aren't exam-ready.</span></button></div>
     <h3 class="h-sub">Or pick one topic (8 questions)</h3><div class="topic-grid">${TOPICS.map(t=>`<button class="tpick" data-start="${t.id}"><span>${t.name}</span>${chip(status(t.id))}</button>`).join('')}</div>`;
     return;}
   if(P.done){
     el.innerHTML=`<div class="result"><h3>${P.title}: ${P.score} / ${P.qs.length}</h3><p>${P.score/P.qs.length>=0.8?'Strong set.':'Every miss is saved in the Mistakes tab with the full solution.'}</p>
-    <div class="btns">${P.speed?`<p class="muted" style="width:100%">${P.fast} of ${P.qs.length} answered right within the time limit.</p>`:''}<button class="btn" ${P.speed?`data-speed="${P.kind==='theory'?'all':P.kind}"`:`data-start="${P.kind}"`}>Another set</button><button class="btn ghost" data-go="topics">See topic status</button><button class="btn ghost" data-reset-practice>Choose a different set</button></div></div>`;return;}
+    <div class="btns"><button class="btn" data-start="${P.kind}">Another set</button><button class="btn ghost" data-go="topics">See topic status</button><button class="btn ghost" data-reset-practice>Choose a different set</button></div></div>`;return;}
   const q=P.qs[P.i],rev=P.checked;
-  if(!rev&&P.shownI!==P.i){P.shownI=P.i;P.shownAt=Date.now();P.pickedAt=null;}
-  const lim=limitFor(q),slow=rev&&P.dt!=null&&P.dt>lim;
-  el.innerHTML=`<div class="practice-bar"><b>${P.title}</b><span>Question ${P.i+1} of ${P.qs.length} · ${P.score} correct${P.speed?` · ${P.fast} automatic`:''}</span>${P.speed&&!rev?`<span class="clock" id="sclock"></span>`:''}<button class="link" data-reset-practice>Quit</button></div>
-  ${P.speed&&!rev?`<div class="sbar"><i id="sfill"></i></div>`:''}
+  el.innerHTML=`<div class="practice-bar"><b>${P.title}</b><span>Question ${P.i+1} of ${P.qs.length} · ${P.score} correct</span><button class="link" data-reset-practice>Quit</button></div>
   ${qHTML(q,'',`pq`,P.picked,rev)}
-  ${rev&&P.dt!=null?`<p class="speed-note ${slow?'slow':'fast'}">${P.picked==null&&P.speed?'Time ran out. ':''}Answered in ${(Math.min(P.dt,lim*9)/1000).toFixed(1)} s · ${P.picked===q.answer&&!slow?'automatic':P.picked===q.answer?'right, but slower than '+lim/1000+' s':'not automatic yet'}</p>`:''}
-  <div class="btns">${rev?`<button class="btn" data-next>${P.i+1<P.qs.length?'Next question':'See results'}</button>`:P.speed?'':`<button class="btn" data-check ${P.picked==null?'disabled':''}>Check answer</button>`}</div>`;
-  clearInterval(P.timer);
-  if(P.speed&&!rev){const tick=()=>{const left=lim-(Date.now()-P.shownAt),c=document.getElementById('sclock'),f=document.getElementById('sfill');if(!c){clearInterval(P.timer);return;}
-    if(left<=0){clearInterval(P.timer);checkPractice(true);return;}c.textContent=(left/1000).toFixed(0)+' s';c.classList.toggle('low',left<4000);if(f)f.style.width=(left/lim*100)+'%';};tick();P.timer=setInterval(tick,200);}
+  <div class="btns">${rev?`<button class="btn" data-next>${P.i+1<P.qs.length?'Next question':'See results'}</button>`:`<button class="btn" data-check ${P.picked==null?'disabled':''}>Check answer</button>`}</div>`;
 }
-function checkPractice(timeout){const q=P.qs[P.i];P.checked=true;clearInterval(P.timer);
-  P.dt=(timeout?Date.now():(P.pickedAt||Date.now()))-P.shownAt;
-  if(timeout){P.picked=null;}
-  if(record(q,P.picked,false,P.dt)){P.score++;if(P.dt<=limitFor(q))P.fast=(P.fast||0)+1;}
-  save();renderHeader();renderPractice();}
 
 /* ---------- exam ---------- */
 let E=null; // {qs, picks, end, submitted}
@@ -2313,9 +2291,8 @@ document.addEventListener('click',e=>{
     else if(d.go==='diag'||d.go==='weak'||d.go==='theory')startPractice(d.go);else if(d.go==='exam'){E=null;go('exam');}else go(d.go);}
   else if(d.topic){openTopic=openTopic===d.topic?null:d.topic;if(openTopic&&!S.read[openTopic]){S.read[openTopic]=1;save();renderHeader();}renderTopics();if(openTopic){const t=document.getElementById('topic-'+openTopic);t&&t.scrollIntoView({block:'start'});}}
   else if(d.practice||d.start)startPractice(d.practice||d.start);
-  else if('check' in d){checkPractice(false);}
-  else if(d.speed){startPractice(d.speed==='all'?'theory':d.speed,true);}
-  else if('next' in d){P.i++;P.picked=null;P.checked=false;P.dt=null;if(P.i>=P.qs.length)P.done=true;renderPractice();window.scrollTo(0,0);}
+  else if('check' in d){const q=P.qs[P.i];P.checked=true;if(record(q,P.picked))P.score++;save();renderHeader();renderPractice();}
+  else if('next' in d){P.i++;P.picked=null;P.checked=false;if(P.i>=P.qs.length)P.done=true;renderPractice();window.scrollTo(0,0);}
   else if('resetPractice' in d){P=null;renderPractice();}
   else if(d.exam){const [n,m,k]=d.exam.split(',');startExam(+n,+m,k);}
   else if('submit' in d)submitExam();
@@ -2330,7 +2307,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{
   const t=e.target;
   if(t.dataset.plan){S.plan[t.dataset.plan]=t.checked;save();renderPlan();}
-  else if(t.name==='pq'&&P&&!P.checked){if(P.pickedAt==null)P.pickedAt=Date.now();P.picked=+t.value;if(P.speed)checkPractice(false);else renderPractice();}
+  else if(t.name==='pq'&&P&&!P.checked){P.picked=+t.value;renderPractice();}
   else if(t.name&&t.name.startsWith('ex')&&E&&!E.submitted){E.picks[+t.name.slice(2)]=+t.value;const bar=document.querySelector('.exam-bar span:nth-child(2)');if(bar)bar.textContent=`${Object.keys(E.picks).length}/${E.qs.length} answered`;
     t.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o.querySelector('input').checked));}
 });
