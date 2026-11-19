@@ -7,19 +7,19 @@
 :root{
   --bg:#F2F4F3; --surface:#FFFFFF; --sunk:#E8ECEA; --ink:#17201D; --muted:#5A6762; --line:#D6DDD9;
   --accent:#2C4A9A; --accent-soft:#E3E9F7; --on-accent:#FFFFFF;
-  --ns:#8B9590; --le:#3A73CF; --np:#B7790A; --er:#1F7F55; --ms:#6B3FB8; --ms-soft:#EEE6FA; --bad:#B9382B; --bad-soft:#F8E6E3; --ok-soft:#E1F1E8;
+  --ns:#8B9590; --le:#3A73CF; --np:#B7790A; --er:#1F7F55; --bad:#B9382B; --bad-soft:#F8E6E3; --ok-soft:#E1F1E8;
   --keys:#F4F1E6; --keys-line:#DCD4B8;
   --display:"Archivo","Arial Narrow",system-ui,sans-serif; --body:"Source Sans 3","Segoe UI",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F1513; --surface:#172020; --sunk:#1E2928; --ink:#E3EAE7; --muted:#97A49F; --line:#2B3735;
   --accent:#93AAF2; --accent-soft:#222E4D; --on-accent:#0F1513;
-  --ns:#7D8884; --le:#78A6F0; --np:#E2A93A; --er:#4CC08A; --ms:#B79CF0; --ms-soft:#2A2140; --bad:#F08A7C; --bad-soft:#3A2220; --ok-soft:#183427;
+  --ns:#7D8884; --le:#78A6F0; --np:#E2A93A; --er:#4CC08A; --bad:#F08A7C; --bad-soft:#3A2220; --ok-soft:#183427;
   --keys:#242318; --keys-line:#4A4630; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0F1513; --surface:#172020; --sunk:#1E2928; --ink:#E3EAE7; --muted:#97A49F; --line:#2B3735;
   --accent:#93AAF2; --accent-soft:#222E4D; --on-accent:#0F1513;
-  --ns:#7D8884; --le:#78A6F0; --np:#E2A93A; --er:#4CC08A; --ms:#B79CF0; --ms-soft:#2A2140; --bad:#F08A7C; --bad-soft:#3A2220; --ok-soft:#183427;
+  --ns:#7D8884; --le:#78A6F0; --np:#E2A93A; --er:#4CC08A; --bad:#F08A7C; --bad-soft:#3A2220; --ok-soft:#183427;
   --keys:#242318; --keys-line:#4A4630; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body)}
@@ -40,10 +40,10 @@ button:focus-visible,input:focus-visible+label,.opt:focus-within{outline:2px sol
 #countdown{font:600 15px var(--mono);color:var(--accent)}
 #sync{font-size:13px;color:var(--muted)}
 .meter{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--sunk);margin-top:16px;gap:2px}
-.seg{display:block;height:100%}.seg-ns{background:var(--ns)}.seg-le{background:var(--le)}.seg-np{background:var(--np)}.seg-er{background:var(--er)}.seg-ms{background:var(--ms)}
+.seg{display:block;height:100%}.seg-ns{background:var(--ns)}.seg-le{background:var(--le)}.seg-np{background:var(--np)}.seg-er{background:var(--er)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted);margin-top:8px}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
-.dot-ns{background:var(--ns)}.dot-le{background:var(--le)}.dot-np{background:var(--np)}.dot-er{background:var(--er)}.dot-ms{background:var(--ms)}
+.dot-ns{background:var(--ns)}.dot-le{background:var(--le)}.dot-np{background:var(--np)}.dot-er{background:var(--er)}
 
 /* tabs */
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-block:1px solid var(--line)}
@@ -58,10 +58,7 @@ main{padding-block:22px 64px}
 /* chips */
 .chip{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--body);padding:5px 9px;border-radius:999px;white-space:nowrap;border:1px solid currentColor}
 .chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.chip-ns{color:var(--ns)}.chip-le{color:var(--le)}.chip-np{color:var(--np)}.chip-er{color:var(--er);background:var(--ok-soft)}.chip-ms{color:var(--ms);background:var(--ms-soft)}
-.mastery{border:1px solid var(--ms);background:var(--ms-soft);border-radius:10px;padding:10px 14px;margin:8px 0 14px}
-.mastery-h{font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ms);margin-bottom:4px}
-.mastery ul{list-style:none;margin:0;padding:0}.mastery li{padding:3px 0}.mastery .mk{display:inline-block;width:1.4em;font-weight:700;color:var(--muted)}.mastery li.done .mk{color:var(--ms)}
+.chip-ns{color:var(--ns)}.chip-le{color:var(--le)}.chip-np{color:var(--np)}.chip-er{color:var(--er);background:var(--ok-soft)}
 
 /* buttons */
 .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}

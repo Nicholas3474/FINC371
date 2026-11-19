@@ -67,7 +67,7 @@ const DATES=[
 /* drop lists for topics not on this exam */
 for(let i=LISTS.length-1;i>=0;i--)if(!TOPIC[LISTS[i].t])LISTS.splice(i,1);
 let GM={view:'menu'};
-function recAtt(topic,ok){logAnswer(topic,ok,false,false);(S.att[topic]=S.att[topic]||[]).push(ok?1:0);if(S.att[topic].length>20)S.att[topic]=S.att[topic].slice(-20);save();renderHeader();}
+function recAtt(topic,ok){(S.att[topic]=S.att[topic]||[]).push(ok?1:0);if(S.att[topic].length>20)S.att[topic]=S.att[topic].slice(-20);save();renderHeader();}
 
 function newMatch(src){
   let pairs=[],topic=null,title='';

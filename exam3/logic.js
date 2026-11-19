@@ -74,7 +74,7 @@ function numQ(topic,prompt,ans,unit,sol,wrong=[],allowNeg=false){
 function mcQ(topic,item){
   const [q,choices,why]=item;
   const opts=shuffle(choices.map((t,i)=>({t,c:i===0})));
-  return {topic,prompt:q,choices:opts.map(o=>o.t),answer:opts.findIndex(o=>o.c),sol:why,bank:true};
+  return {topic,prompt:q,choices:opts.map(o=>o.t),answer:opts.findIndex(o=>o.c),sol:why};
 }
 
 /* ===== Numeric generators ===== */
