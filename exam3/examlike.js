@@ -127,5 +127,5 @@ function xlTopic(group,q){const m=XL_MATH[group]||[];if(m.some(s=>q.toLowerCase(
 function xlSet(key,n){
   const groups=key==='all'?XL_GROUPS:XL_GROUPS.filter(g=>g.key===key);
   const pool=[];groups.forEach(g=>EXAMLIKE[g.key].forEach(it=>pool.push({g:g.key,it})));
-  return shuffle(pool).slice(0,n).map(({g,it})=>{const q=mcQ(xlTopic(g,it[0]),it);q.xl=true;return q;});
+  return shuffle(pool).slice(0,n).map(({g,it})=>{const q=mcQ(it[3]||xlTopic(g,it[0]),it);q.xl=true;return q;});
 }
