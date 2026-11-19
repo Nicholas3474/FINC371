@@ -12,7 +12,7 @@ const FACTS=[
 ['Assignment','Transfers all rights, but the original tenant <b>stays liable</b> unless released.'],
 ['Fixtures','Permanent improvements (e.g., <b>built-in bookcases</b>) usually stay with the property.'],
 ['Quiet enjoyment','Tenant may <b>deduct repair costs from rent</b> if the landlord fails to fix problems.'],
-['Renewal clauses (slides)','<b>Negative</b> = assumes automatic renewal. <b>Positive</b> = doesn\'t assume automatic renewal. (The classmate\'s notes reverse these.)'],
+['Renewal clauses (slides)','<b>Negative</b> = assumes automatic renewal. <b>Positive</b> = doesn\'t assume automatic renewal. (The TA\'s notes reverse these.)'],
 ['What owners pay (slides)','Gross: taxes, utilities, insurance · Net: taxes, insurance · Net-net: taxes · Net-net-net: nothing.'],
 ['Tenancy at will (slides)','Reasonable notice generally <b>30 days</b>. At sufferance: many states require a notice to quit before eviction.'],
 ['Build-to-suit (slides)','Owner builds for the tenant; like a ground lease. Tenant: cheaper to develop, lease payments fully deductible.'],
