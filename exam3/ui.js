@@ -109,8 +109,7 @@ function renderPlan(){
   <li><b>Exam coverage per the syllabus: Chapters 19, 7, 10, 11, 12 and 13.</b> Chapters 17 and 18 were left out of this guide because they belong to Exam 2.</li>
   <li>Source: “371 Exam 3 - Units 7, 10, 11, 12, 13 & Units 17, 18, 19” (76 pages). Every page was read, including the images: the lease example, the Milford Hills tables, Table 12.1, the months-supply formula and Figures 13.5–13.6.</li>
   <li><b>Lecture slides added</b> for Chapters 7, 10, 11, 12, 13 and 19 plus the Sustainable Development lecture. Chapter 19 and sustainability come only from the slides. Slide-only details appear in a “From the lecture slides” box in each lesson and in the question banks.</li>
-  <li><b>Where the slides and the TA's notes disagree, practice questions follow the slides:</b> negative vs. positive renewal clauses (reversed), what owners pay under a net-net lease, and fees based on <i>effective</i> gross income. The regional-center radius differs in three places (8–10, 7–12 and 50 miles).</li>
-  <li>Where the notes contradict themselves (regional trade area 8–10 vs. 7–12 miles; super-regional 750,000 vs. 800,000 sq ft), the lesson flags it.</li></ul></section>`;
+  <li><b>Wherever the TA's notes and the professor's slides differ, this guide uses the slides:</b> a negative renewal clause assumes automatic renewal; under net and net-net leases the owner still pays taxes (and insurance for net); management fees are a % of <i>effective</i> gross income; a regional center's market radius is 50 miles; super-regional centers are 750,000+ sq ft. Key-term definitions were updated to match.</li></ul></section>`;
 }
 
 /* ---------- topics ---------- */

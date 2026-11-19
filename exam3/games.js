@@ -52,12 +52,12 @@ const LISTS=[
 ];
 const DATES=[
 ['LEED v1.0 created','1998'],['First Greenbuild conference (Austin)','2001'],['LEED v4.1','2019'],['LEED Gold points','60–79'],['LEED Platinum points','80+'],['LEED Silver points','50–59'],['Green building ASTM standard','E2114-06a'],
-['Slide pro forma NOI','$89,100'],['Slide pro forma EGI','$162,000'],['Slide pro forma operating expenses','$64,800'],['Management fee base (slides)','% of effective gross income'],['Landlord entry notice','12-hour lead time'],['Landlord entry hours','7:30 a.m.–8:00 p.m.'],
+['Slide pro forma NOI','$89,100'],['Slide pro forma EGI','$162,000'],['Slide pro forma operating expenses','$64,800'],['Landlord entry notice','12-hour lead time'],['Landlord entry hours','7:30 a.m.–8:00 p.m.'],
 ['Tenancy at will notice (slides)','30 days'],['Manufactured home cost (slides)','~$40/sq ft vs. $90 site-built'],['Asset manager fee, 1970s–80s','0.50%–1.50% of AUM'],['Corporate real estate owned','Over $2 trillion'],['Corporate RE share of industrial firms\' assets','25%–40%'],['Asset manager performance period','3–5 years'],
-['Lease that must be in writing','Over 1 year'],['Max tenancy for a stated period','Up to 99 years'],['Typical ground lease length','Over 50 years'],['Property manager fee (direct hire)','4%–10% of gross income'],
+['Lease that must be in writing','Over 1 year'],['Max tenancy for a stated period','Up to 99 years'],['Typical ground lease length','Over 50 years'],['Property manager fee (direct hire)','4%–10% of effective gross income'],
 ['Neighborhood center typical GLA','50,000 sq ft'],['Community center typical GLA','150,000 sq ft'],['Regional center typical GLA','400,000 sq ft'],['Super-regional center typical GLA','1,000,000 sq ft'],
 ['Neighborhood center site','About 3 acres'],['Community center site','10–30 acres'],['Regional center site','30–50 acres'],['Super-regional center site','100+ acres'],
-['Neighborhood center trade radius','1.5 miles'],['Community center trade radius','3–5 miles'],['Regional center trade radius (Unit 12)','8–10 miles'],['Super-regional draw','Over 50 miles'],
+['Neighborhood center trade radius','1.5 miles'],['Community center trade radius','3–5 miles'],['Regional center market radius (slides)','50 miles'],['Super-regional draw','Over 50 miles'],
 ['Primary trade area share of sales','60–70%'],['Secondary trade area share of sales','15–20%'],['Secondary trade area drive time','15–20 minutes'],['Superstore GLA','60,000–200,000 sq ft'],
 ['Northgate (Seattle) opened','1950'],['Southdale (first enclosed mall) opened','1956'],['Mall of America opened','1992'],['Mall of America size','4.2 million sq ft'],['Mall of America visitors a year','Over 42 million'],['Factory outlet malls emerged','1980s'],
 ['Example vacancy rate (50 of 1,500)','3.3%'],['Example months supply (30/mo; 30 vacant; 90 building)','4 months'],['Study exercise 9 months supply','10.8 months'],['Al\'s Shoe Store rent','$2,160'],

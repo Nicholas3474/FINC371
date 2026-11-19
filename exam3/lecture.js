@@ -43,6 +43,11 @@
 ].forEach(([t,d])=>TERMS.push({c:20,t,d,s:d,g:t==='Petal Certification'||t==='Zero Energy Certification'?104:t==='Sustainability'||t==='Sustainable Development'?105:-1}));
 TERMS.forEach(o=>{if(o.c>=19){const base=o.t.replace(/\s*\(.*?\)/g,'');let m=o.d;[o.t,base].concat((o.t.match(/\((.*?)\)/g)||[]).map(x=>x.slice(1,-1))).filter(w=>w.length>=3).sort((a,b)=>b.length-a.length).forEach(w=>{m=m.replace(new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(s|es)?\\b','gi'),'____');});o.s=m;}});
 [19,20].forEach(ch=>{GEN['kt'+ch]=[()=>ktQ(ch)];});
+/* where the TA's key-term definitions differ from the professor's slides, use the slides */
+[['Net Lease','A lease where the tenant pays base rent plus utilities, while the owner pays the real estate taxes and insurance (per the lecture slides).'],
+ ['Net-Net Lease (Double Net Lease)','A lease where the tenant pays rent plus utilities and insurance, while the owner still pays the real estate taxes (per the lecture slides).'],
+ ['Super-Regional Center','The largest retail center, starting at 750,000 square feet of gross leasable area and typically exceeding 1 million, with at least three anchor department stores.']
+].forEach(([t,d])=>{const o=TERMS.find(x=>x.t===t);if(o){o.d=d;o.s=d.replace(/\bnet-net lease\b|\bnet lease\b|super-regional center/gi,'____');}});
 
 /* ---------- Ch 19 math ---------- */
 GEN.invm=[
@@ -134,7 +139,7 @@ BANK.green=[
 /* ---------- slide-only details added to existing topics ---------- */
 BANK.lease=BANK.lease.filter(x=>!/negative renewal clause|double net \(net-net\)/i.test(x[0]));
 BANK.lease.push(
-['Per the lecture slides, a negative renewal clause…',['Assumes automatic renewal','Does not assume automatic renewal','Forbids renewal','Requires a new appraisal'],'Slides: negative = assumes automatic renewal; positive = doesn\'t assume automatic renewal. The TA\'s notes reverse this; go with the slides.'],
+['Per the lecture slides, a negative renewal clause…',['Assumes automatic renewal','Does not assume automatic renewal','Forbids renewal','Requires a new appraisal'],'Slides: negative = assumes automatic renewal; positive = doesn\'t assume automatic renewal. This guide follows the professor\'s slides.'],
 ['Per the lecture slides, under a net-net lease the owner still pays…',['Real estate taxes','Utilities','Insurance','Nothing'],'Slide table (what owners pay): gross = taxes, utilities, insurance; net = taxes, insurance; net-net = taxes; net-net-net = nothing.'],
 ['Under a gross lease, the owner pays…',['Real estate taxes, utilities and insurance','Only taxes','Only insurance','Nothing'],'From the "What Owners Pay" slide.'],
 ['Under a net lease (single net), the owner pays…',['Real estate taxes and insurance; the tenant pays utilities','Only utilities','Everything','Nothing'],'From the "What Owners Pay" slide.'],
@@ -169,7 +174,7 @@ BANK.pm.push(
 ['Why do commercial banks hire property managers, per the IREM list?',['To manage properties obtained in foreclosure','To appraise loans','To sell mortgages','To run branches'],'Other employers: developers, REITs, corporations, government, insurers, colleges, the military, nonprofits.'],
 ['Before the 1970s, most commercial real estate was held by…',['Wealthy families and private partnerships (LPs)','Pension funds','REITs','Insurance companies'],'LPs were run by a "managing equity investor."'],
 ['Institutional investors entered commercial real estate in the 1970s mainly because of its value as…',['A diversifier','A tax shelter only','A short-term trade','A government mandate'],'This created third-party asset managers (investment advisors).'],
-['In the 1970s–80s, asset managers were typically paid…',['0.50%–1.50% of assets under management','4%–10% of gross income','A flat salary','Nothing until sale'],'That created an agency problem: an incentive to acquire and hold assets.'],
+['In the 1970s–80s, asset managers were typically paid…',['0.50%–1.50% of assets under management','4%–10% of effective gross income','A flat salary','Nothing until sale'],'That created an agency problem: an incentive to acquire and hold assets.'],
 ['The recent trend in asset manager pay is…',['Performance-based fees tied to portfolio results','Higher AUM percentages','Commission per lease','Hourly billing'],'Performance is typically evaluated over a 3–5 year contract.'],
 ['Non-real-estate corporations own about how much real estate, per the slides?',['More than $2 trillion','$2 billion','$200 billion','$20 trillion'],'It is often 25%–40% of the total assets of large industrial firms.'],
 ['Corporate real estate often makes up what share of large industrial firms\' total assets?',['25%–40%','1%–5%','60%–80%','Over 90%'],'Historically little effort went into managing it.'],
@@ -206,7 +211,7 @@ BANK.com.push(
 ['Resort hotels are also called…',['Destination or seasonal hotels','Airport hotels','Commercial hotels','Extended-stay hotels'],'They cater to vacationing individuals and families.'],
 ['What three feasibility pieces feed the go/no-go decision in the slides\' Market Analysis Model?',['Market, financial and location/site feasibility','Zoning, permits and taxes','Rent, CAM and deposits','Land, labor and capital'],'The decision: go, no-go, or go with modifications.'],
 ['What are the possible outcomes of the Market Analysis Model decision?',['Go, no-go, or go with modifications','Buy, sell, or hold','Lease, sublease, or assign','Approve or deny only'],'From the last Ch 12 slide.'],
-['Per the slide table, what typical market radius is listed for a regional center?',['50 miles','8–10 miles','1.5 miles','3–5 miles'],'Your notes say 8–10 (Unit 12) and 7–12 (Unit 13); the slide table says 50 and super-regional 50+. Know all three and that they conflict.'],
+['Per the slide table, what typical market radius is listed for a regional center?',['50 miles','8–10 miles','1.5 miles','3–5 miles'],'Slide table: neighborhood 1.5 · community 3–5 · regional 50 · super-regional 50+ miles. The guide uses these figures.'],
 );
 BANK.mkt.push(
 ['Per the slides, space markets are categorized by…',['Property usage and geographic boundaries','Price only','Lender type','Tenant credit score'],'Users (demand) pay for space; suppliers (owners) sell the right to use it.'],
@@ -229,7 +234,7 @@ LESSONS.lease+=lec(`<ul><li><b>What owners pay</b> (slide table): <b>gross</b> =
 <li><b>Build-to-suit:</b> like a ground lease, but the owner builds the building for the tenant. Tenant benefits of both: cheaper to develop (no land purchase) and lease payments are fully deductible as an ordinary expense.</li>
 <li>Graduated-rent leases protect the owner against <b>inflation</b>. After subleasing, the tenant is <b>not</b> relieved of paying rent, and the landlord may approve the sublessee.</li>
 <li>Security deposits cover damage, moving out early or unpaid rent; a cleaning fee is possible. Other rights: common-area maintenance, protection against criminal acts.</li>
-<li>Leases should be in writing, but not all are.</li></ul>`)+flag('The slides and the TA\'s notes disagree on two things. (1) <b>Renewal clauses:</b> the notes say a negative clause means the tenant leaves without notice; the slides say a negative clause assumes automatic renewal. (2) <b>Net-net leases:</b> the notes\' key term says the tenant pays taxes and insurance; the slide table has the owner still paying taxes. The practice questions follow the professor\'s slides.');
+<li>Leases should be in writing, but not all are.</li></ul>`)+flag('This guide follows the professor\'s slides wherever the TA\'s notes differ: a <b>negative</b> renewal clause assumes automatic renewal (positive doesn\'t), and under a <b>net-net</b> lease the owner still pays real estate taxes. The key-term definitions for net and net-net leases were updated to match.');
 LESSONS.pm+=lec(`<ul><li>Property management = day-to-day operations; asset management = physical, financial and ownership structure.</li>
 <li>High going-in/going-out transaction costs mean IRRs are maximized by holding longer, and most returns come from <b>net rental income</b>, not appreciation, so management quality drives returns.</li>
 <li>Leasing can be done by an independent broker (commission = % of the lease's face amount), an in-house leasing agent or the property manager. Most tenants are <b>not credit tenants</b>; weigh willingness and ability to pay, and tenant mix.</li>

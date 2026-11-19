@@ -78,7 +78,7 @@ BANK.lease=[
 ['Ground leases typically run for…',['Over 50 years','1–5 years','Month to month','Exactly 10 years'],'The tenant develops the land; improvements revert to the landowner.'],
 ['A tax advantage of a ground lease for the tenant is that…',['Lease payments are deductible, while land itself cannot be depreciated','The tenant owns the land','The tenant pays no property tax','Improvements never revert'],'Example from your notes: Manhattan office buildings on leased land.'],
 ['Ground leases are frequently used as a financing device for…',['Major office buildings','Single-family homes','Apartments rented month to month','Vacation time-shares'],'From the unit review.'],
-['In a gross lease, who pays the operating expenses (taxes, utilities, insurance)?',['The landlord','The tenant','The lender','They split them 50/50'],'In a net lease the tenant pays them.'],
+['In a gross lease, who pays the operating expenses (taxes, utilities, insurance)?',['The landlord','The tenant','The lender','They split them 50/50'],'Per the slides, under a net lease the owner still pays taxes and insurance and the tenant pays utilities; under net-net-net the owner pays none of them.'],
 ['In a triple net (net-net-net) lease, the tenant pays rent plus…',['Taxes, insurance and maintenance/operating expenses','Only utilities','Nothing else','Only property taxes'],'The landlord receives net rent.'],
 ['A double net (net-net) lease has the tenant pay rent plus…',['Property taxes and insurance','Only maintenance','All operating expenses and the mortgage','Nothing else'],'Per the key-term definition.'],
 ['A lease whose rent rises by specified percentages at stated intervals is a…',['Graduated-rent (step-up) lease','Reappraisal lease','Index lease','Fixed-rent lease'],'A reappraisal lease bases increases on a new appraisal.'],
@@ -115,7 +115,7 @@ BANK.pm=[
 ['A management agreement is…',['Not affected by a change in property ownership during its term','Void when the property is sold','Always oral','Signed by the tenants'],'It sets the manager\'s powers, duties and pay.'],
 ['Which power does a property manager typically have?',['Execute, extend or cancel leases','Sell the property','Refinance the mortgage','Change the zoning'],'Also set and collect rents, settle with tenants, hire and fire, spend funds within limits.'],
 ['Property management employees are often required to be…',['Bonded','Licensed appraisers','Attorneys','CPAs'],'Because they handle owners\' money.'],
-['A manager hired directly by the owner is usually paid…',['A percentage of gross income (about 4%–10%)','A percentage of the sale price','A flat 6% commission on leases only','Nothing until the property sells'],'Managers employed by a management firm usually get a fixed salary.'],
+['A manager hired directly by the owner is usually paid…',['A percentage of effective gross income (about 4%–10%)','A percentage of the sale price','A flat 6% commission on leases only','Nothing until the property sells'],'Managers employed by a management firm usually get a fixed salary.'],
 ['What are the three functions of property management in the unit review?',['Administrative, marketing and physical management','Buying, selling and leasing','Appraisal, brokerage and lending','Acquisition, financing and disposition'],'Acquisition, financing and disposition are asset-manager functions.'],
 ['Why is rental space called a "perishable commodity"?',['An empty month\'s rent is lost forever, so space needs constant marketing','It wears out quickly','Leases expire daily','Buildings depreciate'],'Unrented time can\'t be recovered.'],
 ['For commercial properties, tenant selection often aims to…',['Create synergy among tenants to increase customer traffic','Find the most tenants at any price','Avoid all retail tenants','Fill space with one tenant only'],'Residential selection must follow the Fair Housing Act.'],
@@ -169,7 +169,7 @@ BANK.com=[
 ['The typical GLA of a neighborhood center is…',['50,000 sq ft','150,000 sq ft','400,000 sq ft','1,000,000 sq ft'],'Range 30,000–100,000.'],
 ['The typical GLA of a community center is…',['150,000 sq ft','50,000 sq ft','400,000 sq ft','1,000,000 sq ft'],'Range 100,000–300,000.'],
 ['A neighborhood center serves roughly what radius?',['1.5 miles','3–5 miles','8–10 miles','50 miles'],'Population of about 2,500–40,000.'],
-['A community center\'s primary trade area radius is about…',['3–5 miles','1.5 miles','8–10 miles','25 miles'],'Regional centers: 8–10 miles (unit review).'],
+['A community center\'s primary trade area radius is about…',['3–5 miles','1.5 miles','50 miles','25 miles'],'Slide table: neighborhood 1.5 miles, community 3–5, regional 50, super-regional 50+.'],
 ['The primary trade area typically produces what share of a center\'s sales?',['60–70%','15–20%','90–100%','30–40%'],'The secondary trade area adds 15–20%.'],
 ['The secondary trade area is typically within…',['A 15–20 minute drive','A 5-minute walk','An hour\'s flight','The same block'],'It adds 15–20% of sales.'],
 ['A center anchored by a discount store may be called a…',['Discount shopping center','Power center','Specialty center','Factory outlet center'],'A variation of the community center.'],
@@ -212,7 +212,7 @@ BANK.mkt=[
 ['Which is NOT one of the six major space-market segments?',['Municipal','Residential','Industrial','Lodging'],'The six: residential, industrial, retail, office, agricultural, lodging.'],
 ['Class A office space has…',['High rents due to superior quality and location','Few amenities and poor condition','Basic function at low cost','No tenants'],'Class D has few amenities and poor physical condition.'],
 ['Class C office space is…',['Functional and cost-effective with few amenities','Top quality','Unusable','Always downtown'],'Class B lacks certain attributes but is still desirable.'],
-['In Unit 13, regional centers serve an area within about…',['7–12 miles','1.5 miles','3–5 miles','50+ miles'],'Unit 12\'s review says 8–10 miles; know both.'],
+['Per the slides, what typical market radius does a regional center serve?',['50 miles','1.5 miles','3–5 miles','7 miles'],'Slide table: neighborhood 1.5 · community 3–5 · regional 50 · super-regional 50+ miles.'],
 ['Which is an example of a publicly traded equity asset?',['REIT shares','Bank loans','Whole mortgages','Private real property'],'Figure 13.5: stocks, REITs, mutual funds.'],
 ['Which is an example of a privately traded debt asset?',['Whole mortgages','MBS','Bonds','Stocks'],'Also bank loans and venture debt.'],
 ['Mortgage-backed securities are…',['Publicly traded debt assets','Privately traded equity','Publicly traded equity','Space-market assets'],'Bonds and money instruments are in the same box.'],
@@ -249,9 +249,9 @@ LESSONS.lease=`
 <h4>By who pays expenses and how rent changes</h4>
 <table class="tbl"><tr><th>Lease</th><th>What it means</th></tr>
 <tr><td>Gross</td><td>Landlord pays operating expenses</td></tr>
-<tr><td>Net</td><td>Tenant pays operating expenses; landlord gets net rent</td></tr>
-<tr><td>Net-net (double net)</td><td>Tenant also pays insurance (key term: taxes + insurance)</td></tr>
-<tr><td>Net-net-net (triple net)</td><td>Tenant pays taxes, insurance and operating expenses</td></tr>
+<tr><td>Net</td><td>Owner pays taxes and insurance; tenant pays utilities</td></tr>
+<tr><td>Net-net (double net)</td><td>Owner pays taxes only; tenant pays utilities and insurance</td></tr>
+<tr><td>Net-net-net (triple net)</td><td>Owner pays none of them; tenant pays taxes, insurance and operating expenses</td></tr>
 <tr><td>Fixed-rent</td><td>Rent constant for the term</td></tr>
 <tr><td>Graduated / step-up</td><td>Rent rises by set percentages at set times</td></tr>
 <tr><td>Reappraisal</td><td>Rent changes with property reappraisals</td></tr>
@@ -281,7 +281,7 @@ LESSONS.pm=`
 <ul><li>The manager is a <b>fiduciary</b> (agent) of the owner, under a written <b>management agreement</b> that sets powers, duties, pay and term. A change of owner doesn't end it.</li>
 <li>May need a broker or property management license (varies by state). Designations: <b>CPM</b> (Certified Property Manager), <b>ARM</b> (Accredited Resident Manager). Groups: IREM, BOMA.</li>
 <li>Powers: set and collect rents; execute, extend or cancel leases; settle with tenants; hire, fire and supervise; spend funds within limits. Employees are often <b>bonded</b>.</li>
-<li>Pay: hired directly by the owner → <b>4%–10% of gross income</b> (depends on size, duties, local competition). Employed by a management firm → fixed salary.</li></ul>
+<li>Pay: hired directly by the owner → <b>4%–10% of effective gross income</b> (depends on size, duties, local competition). Employed by a management firm → fixed salary.</li></ul>
 <h4>Three functions (unit review)</h4><p><b>Administrative</b> (rents, records, reports) · <b>Marketing</b> (leasing space profitably) · <b>Physical</b> (maintenance, rehab, renovation).</p>
 <h4>Day-to-day tasks</h4><p>Administration · marketing and advertising (rental space is <b>perishable</b>) · tenant selection (Fair Housing Act; commercial tenant synergy) · lease negotiation · move-in inspection (photos and video) · maintenance (skipping small repairs costs more later) · rent collection (one of the hardest tasks; eviction needs due process, no threats or intimidation, no shutting off utilities) · move-out inspection · security deposit returns (deductions per state law).</p>
 <h4>Asset managers</h4><p>They oversee <b>portfolios</b> to maximize total return. Four functions: <b>management</b> (strategic, e.g., capital improvements), <b>acquisition</b>, <b>financing</b> (lease vs. buy, refinancing, <b>sale-and-leaseback</b> to free capital), and <b>disposition</b> (sell, redevelop, renovate or exchange).</p>`;
@@ -304,14 +304,14 @@ LESSONS.com=`
 <tr><td>Community</td><td>Variety, discount or junior department store</td><td>150,000</td><td>100,000–300,000</td><td>10–30</td><td>40,000–100,000</td></tr>
 <tr><td>Regional</td><td>One or more full-line department stores</td><td>400,000</td><td>300,000–750,000</td><td>30–50</td><td>150,000+</td></tr>
 <tr><td>Super-regional</td><td>Three or more full-line department stores</td><td>1,000,000</td><td>750,000–1,500,000</td><td>100+</td><td>200,000+</td></tr></table>
-<p><b>Trade areas:</b> primary = 60–70% of sales (about 1.5 miles neighborhood, 3–5 community, 8–10 regional); secondary = another 15–20%, within a 15–20 minute drive. Super-regional centers draw from 50+ miles.</p>
+<p><b>Trade areas:</b> primary = 60–70% of sales (typical market radius per the slides: 1.5 miles neighborhood, 3–5 community, 50 regional, 50+ super-regional); secondary = another 15–20%, within a 15–20 minute drive. Super-regional centers draw from 50+ miles.</p>
 <p><b>Variations:</b> superstore (60,000–200,000 sq ft, e.g., Walmart Supercenter, Target) · power center (big-box category killers like Best Buy) · specialty center (niche or upscale) · discount center (community center with a discount anchor) · factory outlet center (purpose-built in the 1980s).</p>
 <p><b>History:</b> Country Club Plaza, Kansas City (one of the first; top-ranked 80+ years) → Northgate, Seattle, 1950 (first department-store anchor and pedestrian mall) → Southdale, near Minneapolis, 1956 (first enclosed, multilevel) → Mall of America, 1992 (4.2M sq ft, 525+ stores, 42M visitors a year). Today: anchors like J.C. Penney leaving; food halls, pop-ups, entertainment.</p>
 <p><b>Development process:</b> market and feasibility analysis → define the trade area → size the market (census, income) → analyze competition → estimate capture → site (location and access matter most; also size, shape, topography, drainage, utilities, zoning) → tenant selection (anchors plus a complementary mix).</p>
 <h4>Office</h4><p>Demand comes from business activity, government employment and white-collar/service growth. Downtown: financial institutions, headquarters, law firms, government. Also "uptown" nodes along major roads and suburban <b>office parks</b> (low-rise, campus-like). Remote work and COVID-19 have reduced demand. Buildings may be single- or multi-tenant, investor-owned or office condos.</p>
 <h4>Industrial</h4><p>Site choice: available land, utilities, transportation access. Feasibility: (1) existing or potential supply, (2) forecast demand, (3) estimate absorption, (4) compare competitiveness.</p>
 <h4>Lodging</h4><p>Demand from pleasure, business and convention travelers. <b>Commercial hotels</b> (business, conventions; weekend dips) · <b>highway/airport hotels</b> (in transit) · <b>resort/destination hotels</b> (vacationers, amenities, seasonal). Revenues are economy-sensitive and rates adjust fast to inflation; management makes or breaks them.</p>
-${flag('Your notes disagree on two numbers: the regional trade area is 8–10 miles in Unit 12\'s review but 7–12 miles in Unit 13, and the super-regional key term says "often exceeding 800,000 sq ft" while Unit 12 says over 750,000 (typically 1 million). Know both.')}`;
+${flag('Where the TA\'s notes differ (regional radius 8–10 or 7–12 miles; super-regional "over 800,000 sq ft"), this guide uses the professor\'s slides: regional 50 miles, super-regional 750,000+ sq ft, typically over 1 million.')}`;
 LESSONS.mkt=`
 <p>A <b>market</b> is the mechanism through which goods and services are traded. Supply and demand together set the <b>equilibrium</b> price.</p>
 <h4>How prices move</h4>
