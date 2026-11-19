@@ -3,7 +3,7 @@ const KEY='finc371-exam3-v1';
 const EXAM_AT=null; /* set once the exam date is known */
 const CHS=[7,10,11,12,13,19,20];
 const STATUS=[
- {k:'ns',label:'Not started'},{k:'le',label:'Learning'},{k:'np',label:'Needs practice'},{k:'er',label:'Exam-ready'}];
+ {k:'ns',label:'Not started'},{k:'le',label:'Learning'},{k:'np',label:'Needs practice'},{k:'er',label:'Exam-ready'},{k:'ms',label:'Mastered'}];
 const PLAN=[
  {day:'Session 1',sub:'About 2 hours: diagnostic, then leases.',items:[
   ['s1a','Take the 10-question diagnostic','diag'],
@@ -31,7 +31,7 @@ const PLAN=[
   ['s6c','Pack the TI-84 (fresh batteries), eat, arrive early',null]]},
 ];
 
-const def=()=>({v:1,att:{},read:{},plan:{},mistakes:[],exams:[],updated:0});
+const def=()=>({v:1,att:{},read:{},plan:{},mistakes:[],exams:[],log:{},seen:{},updated:0});
 let S=def();
 try{const t=localStorage.getItem(KEY);if(t)S=Object.assign(def(),JSON.parse(t));}catch(e){}
 let dbRef=null,saveT=null;
@@ -53,20 +53,42 @@ function sync(t){const el=document.getElementById('sync');if(el)el.textContent=t
   }catch(e){dbRef=null;sync('Progress saved on this device');}
 })();
 
+/* Mastery log: every answer from now on is stored with its time, whether the question was new to you, and whether it came from a timed exam */
+function qKey(q){const s=q.topic+'|'+(q.key||q.prompt);let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36);}
+const isSeen=q=>!!(S.seen&&S.seen[qKey(q)]);
+/* prefer questions you have not seen before, so a correct answer means recall rather than recognition */
+const _makeQ=makeQ;makeQ=function(id,mode){let q,t=0;do{q=_makeQ(id,mode);}while(q.bank&&isSeen(q)&&++t<20);return q;};
+function logAnswer(topic,ok,fresh,exam){S.log=S.log||{};const L=(S.log[topic]=S.log[topic]||[]);L.push({o:ok?1:0,t:Date.now(),f:fresh?1:0,x:exam?1:0});if(L.length>40)S.log[topic]=L.slice(-40);}
+const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();};
+/* Mastered = exam-ready plus: 9 of last 10 right, 3 right on never-seen questions, right answers on 2 different days, and 1 right under timed exam conditions */
+function mastery(id){
+  const L=(S.log&&S.log[id])||[],last=L.slice(-10),c10=last.reduce((a,b)=>a+b.o,0);
+  const fresh=L.filter(e=>e.o&&e.f).length,days=new Set(L.filter(e=>e.o).map(e=>dayKey(e.t))).size,ex=L.filter(e=>e.o&&e.x).length;
+  const checks=[
+    {ok:last.length>=10&&c10>=9,label:'9 of your last 10 correct',have:`${c10} of last ${last.length}`},
+    {ok:fresh>=3,label:'3 correct on questions you had never seen',have:`${fresh} so far`},
+    {ok:days>=2,label:'Correct answers on 2 different days',have:`${days} day${days===1?'':'s'}`},
+    {ok:ex>=1,label:'1 correct in a timed practice exam',have:`${ex} so far`}];
+  return {ok:checks.every(c=>c.ok),checks};
+}
+function masteryHTML(id){const m=mastery(id);return `<div class="mastery"><div class="mastery-h">${m.ok?'Mastered':'Path to mastery'}</div><ul>${m.checks.map(c=>`<li class="${c.ok?'done':''}"><span class="mk">${c.ok?'✓':'○'}</span>${c.label} <span class="muted">(${c.have})</span></li>`).join('')}</ul></div>`;}
+
 /* status: exam-ready requires at least 4 of your last 5 answers correct */
 function stats(id){const a=S.att[id]||[];const last=a.slice(-5);const c=last.reduce((x,y)=>x+y,0);return {n:a.length,last,c};}
 function status(id){const s=stats(id);
   if(s.n===0)return S.read[id]?'le':'ns';
-  if(s.last.length>=5&&s.c>=4)return 'er';
+  if(s.last.length>=5&&s.c>=4)return mastery(id).ok?'ms':'er';
   if(s.c/s.last.length>=0.5)return 'np';
   return 'le';}
 function statusHint(id){const s=stats(id),st=status(id);
-  if(st==='er')return `${s.c} of your last 5 correct`;
+  if(st==='ms')return 'Mastered: every mastery check is met';
+  if(st==='er'){const m=mastery(id);return `Exam-ready · ${m.checks.filter(c=>c.ok).length} of 4 mastery checks met`;}
   if(s.n===0)return S.read[id]?'Lesson opened. Answer questions to move up.':'Open the lesson, then practice';
   const need=Math.max(0,5-s.last.length);
   return `${s.c} of last ${s.last.length} correct · need 4 of your last 5${need?` (${need} more to answer)`:''}`;}
-function record(q,given){
-  const ok=given===q.answer;
+function record(q,given,exam){
+  const ok=given===q.answer,k=qKey(q),fresh=!q.bank||!S.seen[k];
+  S.seen=S.seen||{};S.seen[k]=1;logAnswer(q.topic,ok,fresh,exam);
   (S.att[q.topic]=S.att[q.topic]||[]).push(ok?1:0);
   if(S.att[q.topic].length>20)S.att[q.topic]=S.att[q.topic].slice(-20);
   if(!ok){S.mistakes.unshift({topic:q.topic,prompt:q.prompt,given:given==null?'(no answer)':q.choices[given],right:q.choices[q.answer],sol:q.sol,t:Date.now()});S.mistakes=S.mistakes.slice(0,80);}
@@ -82,7 +104,7 @@ function renderHeader(){
   else if(ms<=0)cd='Exam time. Good luck.';
   else{const h=Math.floor(ms/3.6e6),d=Math.floor(h/24);cd=d>0?`${d} day${d>1?'s':''}, ${h%24} hr until the exam`:`${h} hr ${Math.floor(ms%3.6e6/6e4)} min until the exam`;}
   document.getElementById('countdown').textContent=cd;
-  const counts={ns:0,le:0,np:0,er:0};TOPICS.forEach(t=>counts[status(t.id)]++);
+  const counts={ns:0,le:0,np:0,er:0,ms:0};TOPICS.forEach(t=>counts[status(t.id)]++);
   document.getElementById('meter').innerHTML=STATUS.slice().reverse().map(s=>counts[s.k]?`<span class="seg seg-${s.k}" style="flex:${counts[s.k]}" title="${s.label}: ${counts[s.k]}"></span>`:'').join('');
   document.getElementById('meter-legend').innerHTML=STATUS.map(s=>`<span><i class="dot dot-${s.k}"></i>${s.label} <b>${counts[s.k]}</b></span>`).join('');
 }
@@ -117,12 +139,12 @@ function renderPlan(){
 let openTopic=null;
 function renderTopics(){
   const el=document.getElementById('p-topics');
-  el.innerHTML=`<p class="intro">A topic turns <b>Exam-ready</b> only after you get at least 4 of your last 5 questions on it right. Opening a lesson moves it to Learning.</p>`+
+  el.innerHTML=`<p class="intro">A topic turns <b>Exam-ready</b> after 4 of your last 5 questions on it are right. <b>Mastered</b> is stricter: 9 of your last 10 right, 3 right on questions you'd never seen, right answers on 2 different days, and at least 1 right in a timed practice exam. Practice now favors questions you haven't seen. Mastery tracking starts with answers given after this update.</p>`+
   TOPICS.map(t=>{const st=status(t.id),s=stats(t.id),open=openTopic===t.id;
    return `<article class="topic ${open?'open':''}" id="topic-${t.id}"><button class="topic-row" data-topic="${t.id}" aria-expanded="${open}">
    <span class="topic-unit">${t.unit}</span><span class="topic-name">${t.name}</span>${chip(st)}
    <span class="pips" aria-label="last five answers">${[0,1,2,3,4].map(i=>{const v=s.last[i];return `<i class="pip ${v===1?'ok':v===0?'no':''}"></i>`;}).join('')}</span></button>
-   ${open?`<div class="lesson"><p class="hint">${statusHint(t.id)}</p>${LESSONS[t.id]}<div class="lesson-actions"><button class="btn" data-practice="${t.id}">Practice this topic</button></div></div>`:''}</article>`;}).join('');
+   ${open?`<div class="lesson"><p class="hint">${statusHint(t.id)}</p>${masteryHTML(t.id)}${LESSONS[t.id]}<div class="lesson-actions"><button class="btn" data-practice="${t.id}">Practice this topic</button></div></div>`:''}</article>`;}).join('');
 }
 
 /* ---------- practice ---------- */
@@ -131,7 +153,7 @@ function startPractice(kind){
   let qs=[],title='';
   if(kind==='diag'){title='Diagnostic';qs=['lease','leasem','pm','res','com','mkt','mktm','inv','invm','green'].map(id=>makeQ(id));}
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
-  else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
+  else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:1,ms:0.25}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
   else {title=TOPIC[kind].name;qs=dedupe(Array.from({length:8}),()=>makeQ(kind));}
   P={title,qs,i:0,picked:null,done:false,score:0,kind};
@@ -207,7 +229,7 @@ function renderExam(){
 function submitExam(){
   if(!E||E.submitted)return;clearInterval(examTimer);
   E.submitted=true;E.used=Math.min(E.mins,Math.ceil((Date.now()-(E.end-E.mins*60000))/6e4));
-  E.score=E.qs.reduce((s,q,i)=>s+(record(q,E.picks[i]??null)?1:0),0);
+  E.score=E.qs.reduce((s,q,i)=>s+(record(q,E.picks[i]??null,true)?1:0),0);
   S.exams.unshift({t:Date.now(),score:E.score,n:E.qs.length,used:E.used});S.exams=S.exams.slice(0,10);
   save();renderHeader();renderExam();window.scrollTo(0,0);
 }
