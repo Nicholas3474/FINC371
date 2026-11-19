@@ -133,6 +133,7 @@ function startPractice(kind){
   else if(kind==='theory'){title='Theory mix';qs=buildSet(15,THEORY_SLOTS);}
   else if(kind==='weak'){title='Weakest topics';const order=TOPICS.map(t=>({id:t.id,w:{ns:4,le:3,np:2,er:0.5}[status(t.id)]}));
     for(let i=0;i<10;i++){const tot=order.reduce((a,b)=>a+b.w,0);let r=Math.random()*tot;const t=order.find(o=>(r-=o.w)<0)||order[0];qs.push(makeQ(t.id));}}
+  else if(kind.startsWith('xl:')){const k=kind.slice(3),g=XL_GROUPS.find(x=>x.key===k);title='Exam-like · '+(g?g.label:'Mixed');qs=xlSet(k,k==='all'?15:10);}
   else {title=TOPIC[kind].name;qs=dedupe(Array.from({length:8}),()=>makeQ(kind));}
   P={title,qs,i:0,picked:null,done:false,score:0,kind};
   go('practice');
@@ -150,6 +151,9 @@ function renderPractice(){
     el.innerHTML=`<div class="starts"><button class="start" data-start="diag"><b>Diagnostic</b><span>10 questions, one per major topic. Start here.</span></button>
     <button class="start" data-start="theory"><b>Theory mix</b><span>15 concept and key-term questions from all six chapters. No math.</span></button>
     <button class="start" data-start="weak"><b>Weakest topics</b><span>10 questions weighted toward topics that aren't exam-ready.</span></button></div>
+    <section class="xl"><h3 class="h-sub">Exam-like questions</h3><p class="muted">${Object.values(EXAMLIKE).reduce((a,b)=>a+b.length,0)} original scenario and multi-step questions written from your notes and slides: "which situation…", two-step calculations, and questions that mix ideas, closer to how a professor writes an exam. They count toward each topic's status.</p>
+    <div class="starts"><button class="start" data-start="xl:all"><b>Exam-like mix</b><span>15 questions across every unit</span></button></div>
+    <div class="topic-grid">${XL_GROUPS.map(g=>`<button class="tpick" data-start="xl:${g.key}"><span>${g.label}</span><span class="muted">${EXAMLIKE[g.key].length} questions</span></button>`).join('')}</div></section>
     <h3 class="h-sub">Or pick one topic (8 questions)</h3><div class="topic-grid">${TOPICS.map(t=>`<button class="tpick" data-start="${t.id}"><span>${t.name}</span>${chip(status(t.id))}</button>`).join('')}</div>`;
     return;}
   if(P.done){
